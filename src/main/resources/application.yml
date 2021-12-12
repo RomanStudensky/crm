@@ -1,0 +1,15 @@
+spring:
+  thymeleaf:
+    encoding: utf-8
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    url: jdbc:postgresql://localhost:5432/crm
+    password: 12345
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQL9Dialect
+    generate-ddl: true
+  liquibase:
+    enabled: false
+server:
+  port: 8081
