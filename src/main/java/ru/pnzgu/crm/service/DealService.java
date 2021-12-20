@@ -1,6 +1,7 @@
 package ru.pnzgu.crm.service;
 
 import ru.pnzgu.crm.dto.DealDto;
+import ru.pnzgu.crm.dto.ProductDto;
 
 import java.util.List;
 
@@ -8,6 +9,8 @@ public interface DealService {
     List<DealDto> readAll();
 
     DealDto read(Long id);
+
+    List<ProductDto> readAllProductByDealId(Long id);
 
     DealDto create(DealDto dealDto, Long idSostavLead, Long idDogovor);
 

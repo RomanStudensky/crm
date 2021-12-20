@@ -1,4 +1,4 @@
-package ru.pnzgu.crm.service.impl;
+package ru.pnzgu.crm.exception.util;
 
 import lombok.experimental.UtilityClass;
 

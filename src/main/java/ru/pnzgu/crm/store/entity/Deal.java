@@ -15,13 +15,14 @@ import java.util.List;
 @Table(name = "deal")
 public class Deal extends ParentEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
     @Column(name = "title", nullable = false)
     private String title;
 
-    @ManyToMany(cascade = { CascadeType.ALL })
+    @ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
     @JoinTable(
             name = "deal_product",
             joinColumns = { @JoinColumn(name = "deal_id") },

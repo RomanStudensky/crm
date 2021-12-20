@@ -3,16 +3,17 @@ package ru.pnzgu.crm.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.pnzgu.crm.dto.DealDto;
-import ru.pnzgu.crm.dto.SostavLeadDto;
+import ru.pnzgu.crm.dto.ProductDto;
+import ru.pnzgu.crm.exception.util.ExMes;
 import ru.pnzgu.crm.exception.NotFoundException;
 import ru.pnzgu.crm.service.DealService;
 import ru.pnzgu.crm.store.entity.*;
 import ru.pnzgu.crm.store.repository.DealRepository;
 import ru.pnzgu.crm.store.repository.DogovorRepository;
-import ru.pnzgu.crm.store.repository.LeadRepository;
 import ru.pnzgu.crm.store.repository.SostavLeadRepository;
 import ru.pnzgu.crm.util.mapping.Mappers;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,6 +41,18 @@ public class DealServiceImpl implements DealService {
                 .mapEntityToDto(dealRepository
                         .findById(id)
                         .orElseThrow(() -> new NotFoundException(String.format(ExMes.DEAL_MESSAGE, id))));
+    }
+
+    @Override
+    public List<ProductDto> readAllProductByDealId(Long id) {
+        return dealRepository
+                .findAll()
+                .stream()
+                .filter(deal -> deal.getId().equals(id))
+                .map(Deal::getProducts)
+                .flatMap(Collection::stream)
+                .map(Mappers.PRODUCT_MAPPER::mapEntityToDto)
+                .collect(Collectors.toList());
     }
 
     @Override

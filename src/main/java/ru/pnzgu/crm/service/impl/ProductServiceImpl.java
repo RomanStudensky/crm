@@ -3,6 +3,7 @@ package ru.pnzgu.crm.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.pnzgu.crm.dto.ProductDto;
+import ru.pnzgu.crm.exception.util.ExMes;
 import ru.pnzgu.crm.exception.NotFoundException;
 import ru.pnzgu.crm.service.ProductService;
 import ru.pnzgu.crm.store.entity.Product;
@@ -35,6 +36,15 @@ public class ProductServiceImpl implements ProductService {
                         productRepository
                                 .findById(id)
                                 .orElseThrow(() -> new NotFoundException(String.format(ExMes.PRODUCT_MESSAGE, id))));
+    }
+
+    @Override
+    public List<ProductDto> readByDealId(Long id) {
+        return productRepository
+                .findAll()
+                .stream()
+                .map(Mappers.PRODUCT_MAPPER::mapEntityToDto)
+                .collect(Collectors.toList());
     }
 
     @Override

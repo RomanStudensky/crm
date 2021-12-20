@@ -14,6 +14,7 @@ import java.time.LocalDate;
 @Table(name = "orders")
 public class Order extends ParentEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
@@ -23,9 +24,9 @@ public class Order extends ParentEntity {
     @Column(name = "date")
     private LocalDate date;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "fk_id_contact", nullable = false)
-    private Contact fkIdContact;
+    private Contact contact;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "fk_id_lead")

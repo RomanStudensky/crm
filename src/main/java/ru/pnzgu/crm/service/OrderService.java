@@ -11,7 +11,7 @@ public interface OrderService {
 
     OrderDto read(Long id);
 
-    OrderDto readByContactId(Long id);
+    List<OrderDto> readByContactId(Long id);
 
     OrderDto createOrderAndLead(OrderDto orderDto, Long contactId);
 

@@ -3,6 +3,7 @@ package ru.pnzgu.crm.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.pnzgu.crm.dto.ActivityDto;
+import ru.pnzgu.crm.exception.util.ExMes;
 import ru.pnzgu.crm.exception.NotFoundException;
 import ru.pnzgu.crm.service.ActivityService;
 import ru.pnzgu.crm.store.entity.Activity;

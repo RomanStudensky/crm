@@ -13,6 +13,7 @@ import javax.persistence.*;
 @Table(name = "sostav_lead")
 public class SostavLead extends ParentEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 

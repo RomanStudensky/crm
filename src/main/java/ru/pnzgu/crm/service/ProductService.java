@@ -11,6 +11,8 @@ public interface ProductService {
 
     ProductDto read(Long id);
 
+    List<ProductDto> readByDealId(Long id);
+
     ProductDto create(ProductDto productDto);
 
     ProductDto update(Long id, ProductDto productDto);

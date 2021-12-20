@@ -10,5 +10,5 @@ public interface LeadService {
 
     LeadDto read(Long id);
 
-    LeadDto update(Long id, LeadDto orderDto);
+    LeadDto update(Long id, LeadDto leadDto);
 }

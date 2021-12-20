@@ -15,6 +15,7 @@ import java.util.List;
 @Table(name = "lead")
 public class Lead extends ParentEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 

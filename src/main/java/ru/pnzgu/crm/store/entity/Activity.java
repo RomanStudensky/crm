@@ -14,6 +14,7 @@ import java.time.LocalDate;
 @Table(name = "activity")
 public class Activity extends ParentEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
