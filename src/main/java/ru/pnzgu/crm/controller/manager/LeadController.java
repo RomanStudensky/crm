@@ -8,12 +8,13 @@ import ru.pnzgu.crm.dto.ActivityDto;
 import ru.pnzgu.crm.dto.LeadDto;
 import ru.pnzgu.crm.service.ActivityService;
 import ru.pnzgu.crm.service.LeadService;
-import ru.pnzgu.crm.service.OrderService;
-import ru.pnzgu.crm.service.impl.ActivityServiceImpl;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Контроллер CRUD интерфейса "Лид-Активность"
+ */
 @Controller
 @RequestMapping("/manager")
 @RequiredArgsConstructor
@@ -21,10 +22,10 @@ public class LeadController {
 
     private final String COMMON_VIEW = "/templates/manager/lead/commonLeadView";
     
-    private final String ACTIVITY_CREATE_VIEW = "/templates/manager/lead/action/create";
-    private final String ACTIVITY_UPDATE_VIEW = "/templates/manager/lead/action/update";
+    private final String ACTIVITY_CREATE_VIEW = "/templates/manager/lead/action/activity/create";
+    private final String ACTIVITY_UPDATE_VIEW = "/templates/manager/lead/action/activity/update";
 
-    private final String LEAD_UPDATE_VIEW = "/templates/manager/activity/action/update";
+    private final String LEAD_UPDATE_VIEW = "/templates/manager/lead/action/lead/update";
     
     private final String REDIRECT_URL = "redirect:/manager/lead/%s";
     

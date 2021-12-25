@@ -28,4 +28,6 @@ public class Manager extends ParentEntity {
 
     @Column(name = "phone", nullable = false)
     private String phone;
+
+
 }

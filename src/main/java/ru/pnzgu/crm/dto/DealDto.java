@@ -1,8 +1,9 @@
 package ru.pnzgu.crm.dto;
 
-import lombok.*;
-import ru.pnzgu.crm.dto.DogovorDto;
-import ru.pnzgu.crm.dto.ProductDto;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -16,4 +17,5 @@ public class DealDto extends ParentDto implements Serializable {
     private String title;
     private List<ProductDto> products = new ArrayList<>();
     private DogovorDto dogovor;
+    private List<DealSostavDto> sostav = new ArrayList<>();
 }

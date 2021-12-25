@@ -4,10 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.pnzgu.crm.dto.OrderDto;
-import ru.pnzgu.crm.exception.util.ExMes;
 import ru.pnzgu.crm.exception.NotFoundException;
+import ru.pnzgu.crm.exception.util.MessageConst;
 import ru.pnzgu.crm.service.OrderService;
-import ru.pnzgu.crm.store.entity.*;
+import ru.pnzgu.crm.store.entity.Contact;
+import ru.pnzgu.crm.store.entity.Lead;
+import ru.pnzgu.crm.store.entity.Order;
 import ru.pnzgu.crm.store.repository.ContactRepository;
 import ru.pnzgu.crm.store.repository.LeadRepository;
 import ru.pnzgu.crm.store.repository.OrderRepository;
@@ -29,17 +31,17 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository
                 .findAll()
                 .stream()
-                .map(Mappers.ORDER_MAPPER::mapEntityToDto)
+                .map(Mappers.ORDER::mapEntityToDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     public OrderDto read(Long id) {
         return Mappers
-                .ORDER_MAPPER
+                .ORDER
                 .mapEntityToDto(orderRepository
                         .findById(id)
-                        .orElseThrow(() -> new NotFoundException(String.format(ExMes.ORDER_MESSAGE, id))));
+                        .orElseThrow(() -> new NotFoundException(String.format(MessageConst.ORDER, id))));
     }
 
     @Override
@@ -47,7 +49,7 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository
                 .findOrdersByContact_Id(id)
                 .stream()
-                .map(Mappers.ORDER_MAPPER::mapEntityToDto)
+                .map(Mappers.ORDER::mapEntityToDto)
                 .collect(Collectors.toList());
     }
 
@@ -57,7 +59,7 @@ public class OrderServiceImpl implements OrderService {
 
         Contact contact = contactRepository
                 .findById(contactId)
-                .orElseThrow(() -> new NotFoundException(String.format(ExMes.CONTACT_MESSAGE, contactId)));
+                .orElseThrow(() -> new NotFoundException(String.format(MessageConst.CONTACT, contactId)));
 
         Lead lead = new Lead();
         lead.setTitle(
@@ -71,12 +73,12 @@ public class OrderServiceImpl implements OrderService {
         lead.setState("Создан");
         lead = leadRepository.save(lead);
 
-        Order order = Mappers.ORDER_MAPPER.mapDtoToEntity(orderDto);
+        Order order = Mappers.ORDER.mapDtoToEntity(orderDto);
         order.setLead(lead);
         order.setContact(contact);
 
         return Mappers
-                .ORDER_MAPPER
+                .ORDER
                 .mapEntityToDto(
                         orderRepository.save(order)
                 );
@@ -86,16 +88,16 @@ public class OrderServiceImpl implements OrderService {
     public OrderDto update(Long id, OrderDto orderDto) {
         read(id);
 
-        Order order = Mappers.ORDER_MAPPER.mapDtoToEntity(orderDto);
+        Order order = Mappers.ORDER.mapDtoToEntity(orderDto);
         order.setId(id);
 
         orderDto = Mappers
-                .ORDER_MAPPER
+                .ORDER
                 .mapEntityToDto(
                         orderRepository.save(order)
                 );
 
-        orderDto.setContact(Mappers.CONTACT_MAPPER.mapEntityToDto(order.getContact()));
+        orderDto.setContact(Mappers.CONTACT.mapEntityToDto(order.getContact()));
 
         return orderDto;
     }

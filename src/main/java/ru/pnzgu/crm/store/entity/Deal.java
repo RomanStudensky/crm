@@ -22,13 +22,8 @@ public class Deal extends ParentEntity {
     @Column(name = "title", nullable = false)
     private String title;
 
-    @ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "deal_product",
-            joinColumns = { @JoinColumn(name = "deal_id") },
-            inverseJoinColumns = { @JoinColumn(name = "product_id") }
-    )
-    private List<Product> products = new ArrayList<>();
+    @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, mappedBy = "deal")
+    private List<DealProduct> sostav = new ArrayList<>();
 
     @ManyToOne(optional = false, cascade = { CascadeType.ALL })
     @JoinColumn(name = "fk_id_dogovor", nullable = false)

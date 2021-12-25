@@ -3,8 +3,8 @@ package ru.pnzgu.crm.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.pnzgu.crm.dto.DogovorDto;
-import ru.pnzgu.crm.exception.util.ExMes;
 import ru.pnzgu.crm.exception.NotFoundException;
+import ru.pnzgu.crm.exception.util.MessageConst;
 import ru.pnzgu.crm.service.DogovorService;
 import ru.pnzgu.crm.store.entity.Dogovor;
 import ru.pnzgu.crm.store.repository.DogovorRepository;
@@ -24,28 +24,28 @@ public class DogovorServiceImpl implements DogovorService {
         return dogovorRepository
                 .findAll()
                 .stream()
-                .map(Mappers.DOGOVOR_MAPPER::mapEntityToDto)
+                .map(Mappers.DOGOVOR::mapEntityToDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     public DogovorDto read(Long id) {
         return Mappers
-                .DOGOVOR_MAPPER
+                .DOGOVOR
                 .mapEntityToDto(
                         dogovorRepository
                                 .findById(id)
-                                .orElseThrow(() -> new NotFoundException(String.format(ExMes.DOGOVOR_MESSAGE, id))));
+                                .orElseThrow(() -> new NotFoundException(String.format(MessageConst.DOGOVOR, id))));
     }
 
     @Override
     public DogovorDto create(DogovorDto dogovorDto) {
         return Mappers
-                .DOGOVOR_MAPPER
+                .DOGOVOR
                 .mapEntityToDto(
                         dogovorRepository
                                 .save(Mappers
-                                        .DOGOVOR_MAPPER
+                                        .DOGOVOR
                                         .mapDtoToEntity(dogovorDto))
                 );
     }
@@ -54,13 +54,13 @@ public class DogovorServiceImpl implements DogovorService {
     public DogovorDto update(Long id, DogovorDto dogovorDto) {
         dogovorRepository
                 .findById(id)
-                .orElseThrow(() -> new NotFoundException(String.format(ExMes.DOGOVOR_MESSAGE, id)));
+                .orElseThrow(() -> new NotFoundException(String.format(MessageConst.DOGOVOR, id)));
 
-        Dogovor dogovor = Mappers.DOGOVOR_MAPPER.mapDtoToEntity(dogovorDto);
+        Dogovor dogovor = Mappers.DOGOVOR.mapDtoToEntity(dogovorDto);
         dogovor.setId(id);
 
         return Mappers
-                .DOGOVOR_MAPPER
+                .DOGOVOR
                 .mapEntityToDto(
                         dogovorRepository.save(dogovor)
                 );

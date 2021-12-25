@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" class="h-100">
+<head>
+    <meta charset="UTF-8">
+    <title>Изменение даты отпуска</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Ресторан - Администратор</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Панель управления">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="mx-auto">
+        <div class="collapse navbar-collapse" style="width: 100%;" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" th:href="@{/admin/commonAdminViev}">Стол-Бронь<span class="sr-only"></span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled" href="#">Выход</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div style="position: absolute; left: 50%; transform:translate(-50%, 0)">
+        <form th:method="POST" th:action="@{/manager/contact/create}">
+            <div class="f">
+                <label for="surname">Введите фамилию: </label>
+                <input type="text" th:field="*{contact.surname}" id="surname" />
+                <div style="color:red" th:if="${#fields.hasErrors('contact.surname')}" th:errors="*{contact.surname}">Name Error</div>
+            </div>
+
+            <div class="f">
+                <label for="name">Введите имя: </label>
+                <input type="text" th:field="*{contact.name}" id="name" />
+                <div style="color:red" th:if="${#fields.hasErrors('contact.name')}" th:errors="*{contact.name}">Name Error</div>
+            </div>
+
+            <div class="f">
+                <label for="lastname">Введите отчество: </label>
+                <input type="text" th:field="*{contact.lastname}" id="lastname" />
+                <div style="color:red" th:if="${#fields.hasErrors('contact.lastname')}" th:errors="*{contact.lastname}">Name Error</div>
+            </div>
+
+            <div class="f">
+                <label for="phone">Введите телефонный номер: </label>
+                <input id="phone" type="tel" name="tel" th:field="*{contact.phone}" pattern="\+7\s?[-]{0,1}9[0-9]{2}[-]{0,1}\s?\d{3}[-]{0,1}\d{2}[-]{0,1}\d{2}" maxlength="16">
+                <div style="color:red" th:if="${#fields.hasErrors('contact.phone')}" th:errors="*{contact.phone}">Name Error</div>
+            </div>
+
+            <div class="f">
+                <label for="address">Введите адрес: </label>
+                <input type="text" th:field="*{contact.address}" id="address" />
+                <div style="color:red" th:if="${#fields.hasErrors('contact.address')}" th:errors="*{contact.address}">Name Error</div>
+            </div>
+
+            <div class="f">
+                <label for="birthday">Укажите день рождения: </label>
+                <input type="date" th:field="*{contact.birthday}" id="birthday" />
+                <div style="color:red" th:if="${#fields.hasErrors('contact.birthday')}" th:errors="*{contact.birthday}">Name Error</div>
+            </div>
+
+            <div class="f">
+                <label for="company">Введите название организации: </label>
+                <input type="text" th:field="*{contact.company}" id="company" />
+                <div style="color:red" th:if="${#fields.hasErrors('contact.company')}" th:errors="*{contact.company}">Name Error</div>
+            </div>
+            <br/>
+            <div class="f">
+                <label for="post">Введите должность: </label>
+                <input class="f" type="text" th:field="*{contact.post}" id="post"/>
+                <div style="color:red" th:if="${#fields.hasErrors('contact.post')}" th:errors="*{contact.post}">Age Error</div>
+            </div>
+            <br/>
+            <input type="submit" value="Сохранить"/>
+        </form>
+</div>
+</body>
+</html>

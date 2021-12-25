@@ -1,6 +1,5 @@
 package ru.pnzgu.crm.service;
-import ru.pnzgu.crm.dto.ContactDto;
-import ru.pnzgu.crm.dto.LeadDto;
+
 import ru.pnzgu.crm.dto.OrderDto;
 
 import java.util.List;

@@ -3,7 +3,9 @@ package ru.pnzgu.crm.util.mapping;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import ru.pnzgu.crm.dto.ParentDto;
-import ru.pnzgu.crm.store.entity.ParentEntity;;
+import ru.pnzgu.crm.store.entity.ParentEntity;
+
+;
 
 @RequiredArgsConstructor
 public class SimpleMapper<Dto extends ParentDto, Entity extends ParentEntity> {

@@ -12,7 +12,11 @@ public interface DealService {
 
     List<ProductDto> readAllProductByDealId(Long id);
 
-    DealDto create(DealDto dealDto, Long idSostavLead, Long idDogovor);
+    DealDto create(DealDto dealDto, Long leadId, Long dogovorId);
 
     DealDto update(Long id, DealDto dealDto);
+
+    List<DealDto> readAllByLeadId(Long leadId);
+
+    Long readLeadIdByDealId(Long dealdId);
 }

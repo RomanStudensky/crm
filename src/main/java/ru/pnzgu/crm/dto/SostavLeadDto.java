@@ -1,9 +1,9 @@
 package ru.pnzgu.crm.dto;
 
-import lombok.*;
-import ru.pnzgu.crm.dto.ActivityDto;
-import ru.pnzgu.crm.dto.DealDto;
-import ru.pnzgu.crm.dto.LeadDto;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.io.Serializable;
 

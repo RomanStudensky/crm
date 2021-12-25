@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -25,5 +27,8 @@ public class Product extends ParentEntity {
 
     @Column(name = "description", nullable = false)
     private String description;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "product", fetch = FetchType.LAZY)
+    private List<DealProduct> sostav = new ArrayList<>();
 
 }

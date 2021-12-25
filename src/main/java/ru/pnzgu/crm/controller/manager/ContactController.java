@@ -8,8 +8,13 @@ import ru.pnzgu.crm.dto.ContactDto;
 import ru.pnzgu.crm.dto.OrderDto;
 import ru.pnzgu.crm.service.ContactService;
 import ru.pnzgu.crm.service.OrderService;
+
 import java.util.List;
 
+/**
+ * Контроллер CRUD интерфейса "Контакт-Заявка"
+ * Создаёт лид совместно с заявкой
+ */
 @Controller
 @RequestMapping("/manager")
 @RequiredArgsConstructor
@@ -76,7 +81,6 @@ public class ContactController {
     public String getOrderUpdateView(@PathVariable Long id, Model model) {
         OrderDto orderDto = orderService.read(id);
         model.addAttribute("order", orderDto);
-        model.addAttribute("contact", orderDto.getContact());
 
         return ORDER_UPDATE_VIEW;
     }
@@ -97,11 +101,11 @@ public class ContactController {
         return String.format(REDIRECT_URL, id);
     }
 
-    @PostMapping("/order/create/{id}")
-    public String createOrder(@ModelAttribute OrderDto orderDto, @PathVariable Long id) {
-        orderService.createOrderAndLead(orderDto, id);
+    @PostMapping("/order/create/{contactId}")
+    public String createOrder(@ModelAttribute OrderDto orderDto, @PathVariable Long contactId) {
+        orderService.createOrderAndLead(orderDto, contactId);
 
-        return String.format(REDIRECT_URL, id);
+        return String.format(REDIRECT_URL, contactId);
     }
 
     @PostMapping("/order/update/{id}")

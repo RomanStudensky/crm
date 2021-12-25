@@ -3,8 +3,8 @@ package ru.pnzgu.crm.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.pnzgu.crm.dto.ActivityDto;
-import ru.pnzgu.crm.exception.util.ExMes;
 import ru.pnzgu.crm.exception.NotFoundException;
+import ru.pnzgu.crm.exception.util.MessageConst;
 import ru.pnzgu.crm.service.ActivityService;
 import ru.pnzgu.crm.store.entity.Activity;
 import ru.pnzgu.crm.store.entity.Manager;
@@ -27,17 +27,17 @@ public class ActivityServiceImpl implements ActivityService {
         return activityRepository
                 .findAll()
                 .stream()
-                .map(Mappers.ACTIVITY_MAPPER::mapEntityToDto)
+                .map(Mappers.ACTIVITY::mapEntityToDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     public ActivityDto read(Long id) {
         return Mappers
-                .ACTIVITY_MAPPER
+                .ACTIVITY
                 .mapEntityToDto(activityRepository
                                 .findById(id)
-                                .orElseThrow(() -> new NotFoundException(String.format(ExMes.ACTIVITY_MESSAGE, id))));
+                                .orElseThrow(() -> new NotFoundException(String.format(MessageConst.ACTIVITY, id))));
     }
 
     @Override
@@ -45,13 +45,13 @@ public class ActivityServiceImpl implements ActivityService {
         Manager manager =
                 managerRepository
                         .findById(managerId)
-                        .orElseThrow(() -> new NotFoundException(String.format(ExMes.MANAGER_MESSAGE, managerId)));
+                        .orElseThrow(() -> new NotFoundException(String.format(MessageConst.MANAGER, managerId)));
 
-        Activity activity = Mappers.ACTIVITY_MAPPER.mapDtoToEntity(activityDto);
+        Activity activity = Mappers.ACTIVITY.mapDtoToEntity(activityDto);
         activity.setManager(manager);
 
         return Mappers
-                .ACTIVITY_MAPPER
+                .ACTIVITY
                 .mapEntityToDto(
                         activityRepository.save(activity)
                 );
@@ -62,13 +62,13 @@ public class ActivityServiceImpl implements ActivityService {
 
         activityRepository
                 .findById(id)
-                .orElseThrow(() -> new NotFoundException(String.format(ExMes.ACTIVITY_MESSAGE, id)));
+                .orElseThrow(() -> new NotFoundException(String.format(MessageConst.ACTIVITY, id)));
 
-        Activity activity = Mappers.ACTIVITY_MAPPER.mapDtoToEntity(activityDto);
+        Activity activity = Mappers.ACTIVITY.mapDtoToEntity(activityDto);
         activity.setId(id);
 
         return Mappers
-                .ACTIVITY_MAPPER
+                .ACTIVITY
                 .mapEntityToDto(
                         activityRepository.save(activity)
                 );
