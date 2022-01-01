@@ -1,6 +1,5 @@
 package ru.pnzgu.crm.store.entity;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,7 +8,6 @@ import javax.persistence.*;
 
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @Entity
 @Table(name = "sostav_lead")

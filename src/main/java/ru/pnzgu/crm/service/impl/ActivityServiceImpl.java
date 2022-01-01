@@ -47,14 +47,19 @@ public class ActivityServiceImpl implements ActivityService {
                         .findById(managerId)
                         .orElseThrow(() -> new NotFoundException(String.format(MessageConst.MANAGER, managerId)));
 
-        Activity activity = Mappers.ACTIVITY.mapDtoToEntity(activityDto);
+        Activity activity = Mappers
+                .ACTIVITY
+                .mapDtoToEntity(activityDto);
+
         activity.setManager(manager);
 
-        return Mappers
+        activityDto = Mappers
                 .ACTIVITY
                 .mapEntityToDto(
                         activityRepository.save(activity)
                 );
+
+        return
     }
 
     @Override

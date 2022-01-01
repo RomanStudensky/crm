@@ -20,11 +20,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ContactController {
     private final String COMMON_VIEW = "/manager/contact/commonContactView";
-    private final String CONTACT_CREATE_VIEW = "/manager/contact/action/create";
-    private final String CONTACT_UPDATE_VIEW = "/manager/contact/action/update";
+    private final String CONTACT_CREATE_VIEW = "/manager/contact/action/contact/create";
+    private final String CONTACT_UPDATE_VIEW = "/manager/contact/action/contact/update";
 
-    private final String ORDER_CREATE_VIEW = "/manager/contact/order/action/create";
-    private final String ORDER_UPDATE_VIEW = "/manager/contact/order/action/update";
+    private final String ORDER_CREATE_VIEW = "/manager/contact/action/order/create";
+    private final String ORDER_UPDATE_VIEW = "/manager/contact/action/order/update";
 
     private final String REDIRECT_URL = "redirect:/manager/contact/%s";
 

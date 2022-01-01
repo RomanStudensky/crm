@@ -8,7 +8,7 @@ spring:
     password: 12345
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQL9Dialect
-    generate-ddl: true
+#    generate-ddl: true
   liquibase:
     enabled: false
 server:

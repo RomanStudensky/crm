@@ -16,4 +16,8 @@ public class ManagerDto extends ParentDto implements Serializable {
     private String lastname;
     private String surname;
     private String phone;
+
+    public String getFullName() {
+        return String.format("%s %s %s", surname, name, lastname);
+    }
 }

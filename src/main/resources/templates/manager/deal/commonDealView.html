@@ -122,11 +122,9 @@
     <table>
         <thead>
         <tr>
-            <th>№ сделки</th>
+            <th>№ лида</th>
             <th>Заголовок</th>
-            <th>Договор</th>
-
-            <th class="_btn-active-table" colspan="2" style="text-align: center;"><a th:href="@{/manager/deal/create/view}">Добавить</a></th>
+            <th>Состояние</th>
         </tr>
         </thead>
         <div class="scroll-table-body">
@@ -135,6 +133,7 @@
                 <div th:if="${lead.getId() == leadId}">
                     <th style="background-color: #efefef" th:text="${lead.getId()}"></th>
                     <th style="background-color: #efefef" th:text="${lead.getTitle()}"></th>
+                    <th style="background-color: #efefef" th:text="${lead.getState()}"></th>
                     <th class="_btn-active-table"><a th:href="@{/manager/deal/{id}(id=${lead.getId()})}">Сделки</a></th>
                 </div>
                 <div th:unless="${lead.getId == leadId}">
@@ -148,7 +147,7 @@
     </table>
 </div>
 
-<div class="scroll-table">
+<div th:unless="${dealList.isEmpty()}" class="scroll-table">
     <table>
         <thead>
         <tr>
@@ -166,14 +165,14 @@
                     <th style="background-color: #efefef" th:text="${deal.getId()}"></th>
                     <th style="background-color: #efefef" th:text="${deal.getTitle()}"></th>
                     <th style="background-color: #efefef" th:text="${deal.getDogovor().getTitle()}"></th>
-                    <th class="_btn-active-table"><a th:href="@{/manager/deal/{id}(id=${deal.getId()})}">Продукты</a></th>
+                    <th class="_btn-active-table"><a th:href="@{/manager/deal/{id}(id=${deal.getId()})}">Товар</a></th>
                     <th class="_btn-active-table"><a th:href="@{/manager/deal/update/view/{id}(id=${deal.getId()})}">Редактировать</a></th>
                 </div>
                 <div th:unless="${deal.getId == dealId}">
                     <th style="background-color: #efefef" th:text="${deal.getId()}"></th>
                     <th style="background-color: #efefef" th:text="${deal.getTitle()}"></th>
                     <th style="background-color: #efefef" th:text="${deal.getDogovor().getTitle()}"></th>
-                    <th class="_btn-active-table"><a th:href="@{/manager/deal/{idLead}/(idLead=${leadId}, idDeal=${deal.getId()})}">Продукты</a></th>
+                    <th class="_btn-active-table"><a th:href="@{/manager/deal/{idLead}/(idLead=${leadId}, idDeal=${deal.getId()})}">Товар</a></th>
                     <th class="_btn-active-table"><a th:href="@{/manager/deal/update/view/{id}(id=${deal.getId()})}">Редактировать</a></th>
                 </div>
             </tr>
@@ -182,12 +181,12 @@
     </table>
 </div>
 
-<div class="scroll-table">
+<div th:unless="${dealList.isEmpty()}" class="scroll-table">
     <table>
         <thead>
         <tr>
             <th>№ состава</th>
-            <th>Продукт</th>
+            <th>Товар</th>
             <th>Количество</th>
             <th class="_btn-active-table" colspan="1" style="text-align: center;"><a th:href="@{/manager/deal/sostav/create/view/{id}(id=${dealId})}">Добавить</a></th>
         </tr>

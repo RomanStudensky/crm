@@ -28,7 +28,6 @@ public class Order extends ParentEntity {
     @JoinColumn(name = "fk_id_contact", nullable = false)
     private Contact contact;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "fk_id_lead")
+    @OneToOne(mappedBy = "orders", fetch = FetchType.EAGER)
     private Lead lead;
 }
