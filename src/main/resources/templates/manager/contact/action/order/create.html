@@ -39,18 +39,6 @@
                 <div style="color:red" th:if="${#fields.hasErrors('order.date')}" th:errors="*{order.date}">Name Error</div>
             </div>
 
-<!--            <div class="f">-->
-<!--                <label for="role">Выберите контакт</label>-->
-<!--                <br/>-->
-<!--                <select id="role" style="width: 300px;" th:field="*{contact}" name="role" >-->
-<!--                    <option th:each="cont : ${contactList}"-->
-<!--                            th:value="${cont}"-->
-<!--                            th:text="${cont.getId() + ' - ' + cont.getSurname() + ' ' + cont.getName() + ' ' + cont.getLastname()}"-->
-<!--                    </option>-->
-
-<!--                </select>-->
-<!--            </div>-->
-
             <br/>
             <input type="submit" value="Сохранить"/>
         </form>

@@ -25,7 +25,8 @@ public class Lead extends ParentEntity {
     @Column(name = "title", nullable = false)
     private String title;
 
-    @OneToOne(mappedBy="lead")
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "fk_id_orders")
     private Order orders;
 
     @OneToMany(fetch = FetchType.LAZY)

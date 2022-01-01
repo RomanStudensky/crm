@@ -26,7 +26,7 @@
 </nav>
 <div style="position: absolute; left: 50%; transform:translate(-50%, 0)">
     <div style="position: absolute; left: 50%; transform:translate(-50%, 0)">
-            <form th:method="POST" th:action="@{/manager/contact/update/{id}(id=${contact.id})}">
+            <form th:method="POST" th:action="@{/manager/contact/update/{id}(id=${order.getId()})}">
                 <div class="f">
                     <label for="origin">Введите источник заявки: </label>
                     <input type="text" th:field="*{order.origin}" id="origin" />
@@ -39,18 +39,6 @@
                     <div style="color:red" th:if="${#fields.hasErrors('order.date')}" th:errors="*{order.date}">Name Error</div>
                 </div>
 
-<!--                <div class="f">-->
-<!--                    <label for="role">Выберите контакт</label>-->
-<!--                    <br/>-->
-<!--                    <select id="role" style="width: 300px;" th:field="*{contact}" name="role" >-->
-<!--                        <option th:each="cont : ${contactList}"-->
-<!--                                th:value="${cont}"-->
-<!--                                th:text="${cont.getId() + ' - ' + cont.getSurname() + ' ' + cont.getName() + ' ' + cont.getLastname()}"-->
-<!--                                th:selected="${cont.getId() == order.getContact().getId()} ? 'selected' : 'none'">-->
-<!--                        </option>-->
-
-<!--                    </select>-->
-<!--                </div>-->
                 <br/>
                 <input type="submit" value="Сохранить"/>
         </form>

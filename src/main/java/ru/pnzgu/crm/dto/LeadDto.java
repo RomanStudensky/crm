@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -14,5 +16,6 @@ import java.io.Serializable;
 public class LeadDto extends ParentDto implements Serializable {
     private String state;
     private String title;
-    private OrderDto order;
+    private OrderDto orders;
+    private List<SostavLeadDto> sostavLead = new ArrayList<>();
 }

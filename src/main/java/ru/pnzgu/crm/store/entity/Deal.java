@@ -22,6 +22,9 @@ public class Deal extends ParentEntity {
     @Column(name = "title", nullable = false)
     private String title;
 
+    @Column(name = "approved", nullable = false)
+    private boolean approved;
+
     @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, mappedBy = "deal")
     private List<DealProduct> sostav = new ArrayList<>();
 
@@ -32,4 +35,6 @@ public class Deal extends ParentEntity {
     @ManyToOne
     @JoinColumn(name = "fk_id_sostav_lead")
     private SostavLead sostavLead;
+
+
 }

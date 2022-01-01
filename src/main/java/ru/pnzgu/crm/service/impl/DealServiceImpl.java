@@ -3,23 +3,19 @@ package ru.pnzgu.crm.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.pnzgu.crm.ActivityState;
 import ru.pnzgu.crm.dto.DealDto;
 import ru.pnzgu.crm.dto.ProductDto;
 import ru.pnzgu.crm.exception.NotFoundException;
 import ru.pnzgu.crm.exception.util.MessageConst;
 import ru.pnzgu.crm.service.DealService;
-import ru.pnzgu.crm.store.entity.Deal;
-import ru.pnzgu.crm.store.entity.DealProduct;
-import ru.pnzgu.crm.store.entity.Dogovor;
-import ru.pnzgu.crm.store.entity.SostavLead;
-import ru.pnzgu.crm.store.repository.DealRepository;
-import ru.pnzgu.crm.store.repository.DogovorRepository;
-import ru.pnzgu.crm.store.repository.LeadRepository;
-import ru.pnzgu.crm.store.repository.SostavLeadRepository;
+import ru.pnzgu.crm.store.entity.*;
+import ru.pnzgu.crm.store.repository.*;
 import ru.pnzgu.crm.util.mapping.Mappers;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,6 +26,7 @@ public class DealServiceImpl implements DealService {
     private final SostavLeadRepository sostavLeadRepository;
     private final DogovorRepository dogovorRepository;
     private final LeadRepository leadRepository;
+    private final ActivityRepository activityRepository;
 
     @Override
     public List<DealDto> readAll() {
@@ -62,23 +59,59 @@ public class DealServiceImpl implements DealService {
                 .collect(Collectors.toList());
     }
 
+
+    /**
+     * Сохраняет новую сделку и прикрепляет к последнему составу лида, если к нему не прикреплена сделка, иначе создаёт новый состав и активность и связывает их со сделкой
+     * <br/>
+     *
+     * @param dealDto сделка
+     * @param leadId лид
+     * @param dogovorId идентификатор договора
+     * @return сохраненная сделка
+     */
     @Override
     @Transactional
     public DealDto create(DealDto dealDto, Long leadId, Long dogovorId) {
+
         Dogovor dogovor = dogovorRepository
                         .findById(dogovorId)
                         .orElseThrow(() -> new NotFoundException(String.format(MessageConst.DOGOVOR, dogovorId)));
 
+        // создаём и сохраняем сделку
         Deal deal = Mappers.DEAL.mapDtoToEntity(dealDto);
         deal.setDogovor(dogovor);
-        dealDto = Mappers.DEAL.mapEntityToDto(dealRepository.save(deal));
+        deal.setApproved(false);
+        dealRepository.saveAndFlush(deal);
+        //
 
+        // считываем состав лида
         SostavLead sostavLead = sostavLeadRepository
-                .findByLead_Id(leadId)
+                .findLastByLeadId(leadId)
                 .orElseThrow(() -> new NotFoundException(String.format(MessageConst.SOSTAV_LEAD, dogovorId)));
+
+        Activity activity;
+
+        if (Objects.nonNull(sostavLead.getDeal())) {
+            // создаём и сохраняем активность
+            activity = new Activity();
+            activity.setManager(sostavLead.getActivity().getManager());
+            activity.setTitle("Заключение сделки");
+            activity.setState(ActivityState.END.getLabel());
+            activity = activityRepository.saveAndFlush(activity);
+
+            Lead leadNow = sostavLead.getLead();
+
+
+            sostavLead = new SostavLead();
+            sostavLead.setLead(leadNow);
+        } else {
+            activity = sostavLead.getActivity();
+        }
+
+        sostavLead.setActivity(activity);
         sostavLead.setDeal(deal);
 
-        sostavLeadRepository.save(sostavLead);
+        dealDto = Mappers.DEAL.mapEntityToDto(sostavLeadRepository.save(sostavLead).getDeal());
 
         return dealDto;
     }
