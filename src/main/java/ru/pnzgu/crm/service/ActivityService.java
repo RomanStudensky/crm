@@ -10,7 +10,9 @@ public interface ActivityService {
 
     ActivityDto read(Long id);
 
-    ActivityDto create(ActivityDto activityDto, Long managerId);
+    ActivityDto create(ActivityDto activityDto, Long managerId, Long leadId);
 
     ActivityDto update(Long id, ActivityDto activityDto);
+
+    List<ActivityDto> readAllSostavByLeadId(Long leadId);
 }

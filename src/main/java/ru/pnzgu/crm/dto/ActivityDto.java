@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
+import ru.pnzgu.crm.ActivityState;
 import ru.pnzgu.crm.util.mapping.DateOptions;
 import ru.pnzgu.crm.util.mapping.TimeOptions;
 
@@ -18,6 +19,7 @@ import java.time.LocalTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ActivityDto extends ParentDto implements Serializable {
+
     private String title;
     private String description;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
@@ -26,7 +28,6 @@ public class ActivityDto extends ParentDto implements Serializable {
     @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = TimeOptions.PATTERN)
     private LocalTime time;
-    private String state;
+    private ActivityState state;
     private ManagerDto manager;
-    private SostavLeadDto sostavLeadDto;
 }

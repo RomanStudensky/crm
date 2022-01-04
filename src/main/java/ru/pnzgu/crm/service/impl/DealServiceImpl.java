@@ -9,8 +9,14 @@ import ru.pnzgu.crm.dto.ProductDto;
 import ru.pnzgu.crm.exception.NotFoundException;
 import ru.pnzgu.crm.exception.util.MessageConst;
 import ru.pnzgu.crm.service.DealService;
-import ru.pnzgu.crm.store.entity.*;
-import ru.pnzgu.crm.store.repository.*;
+import ru.pnzgu.crm.store.entity.Activity;
+import ru.pnzgu.crm.store.entity.Deal;
+import ru.pnzgu.crm.store.entity.DealProduct;
+import ru.pnzgu.crm.store.entity.Dogovor;
+import ru.pnzgu.crm.store.repository.ActivityRepository;
+import ru.pnzgu.crm.store.repository.DealRepository;
+import ru.pnzgu.crm.store.repository.DogovorRepository;
+import ru.pnzgu.crm.store.repository.LeadRepository;
 import ru.pnzgu.crm.util.mapping.Mappers;
 
 import java.util.Collection;
@@ -23,7 +29,6 @@ import java.util.stream.Collectors;
 public class DealServiceImpl implements DealService {
 
     private final DealRepository dealRepository;
-    private final SostavLeadRepository sostavLeadRepository;
     private final DogovorRepository dogovorRepository;
     private final LeadRepository leadRepository;
     private final ActivityRepository activityRepository;
@@ -81,37 +86,24 @@ public class DealServiceImpl implements DealService {
         Deal deal = Mappers.DEAL.mapDtoToEntity(dealDto);
         deal.setDogovor(dogovor);
         deal.setApproved(false);
-        dealRepository.saveAndFlush(deal);
-        //
+        dealDto = Mappers.DEAL.mapEntityToDto(dealRepository.saveAndFlush(deal));
 
-        // считываем состав лида
-        SostavLead sostavLead = sostavLeadRepository
+        // находим последнюю активность у лида с идентификатором - leadId, иначе создаём новую активность
+        Activity activity = activityRepository
                 .findLastByLeadId(leadId)
-                .orElseThrow(() -> new NotFoundException(String.format(MessageConst.SOSTAV_LEAD, dogovorId)));
+                .stream()
+                .findFirst()
+                .orElse(null);
 
-        Activity activity;
-
-        if (Objects.nonNull(sostavLead.getDeal())) {
+        if (activity == null || Objects.nonNull(activity.getDeal())) {
             // создаём и сохраняем активность
             activity = new Activity();
-            activity.setManager(sostavLead.getActivity().getManager());
             activity.setTitle("Заключение сделки");
-            activity.setState(ActivityState.END.getLabel());
-            activity = activityRepository.saveAndFlush(activity);
-
-            Lead leadNow = sostavLead.getLead();
-
-
-            sostavLead = new SostavLead();
-            sostavLead.setLead(leadNow);
-        } else {
-            activity = sostavLead.getActivity();
+            activity.setState(ActivityState.END);
         }
 
-        sostavLead.setActivity(activity);
-        sostavLead.setDeal(deal);
-
-        dealDto = Mappers.DEAL.mapEntityToDto(sostavLeadRepository.save(sostavLead).getDeal());
+        activity.setDeal(deal);
+        activityRepository.saveAndFlush(activity);
 
         return dealDto;
     }

@@ -3,11 +3,10 @@ package ru.pnzgu.crm.store.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.Hibernate;
+import ru.pnzgu.crm.ActivityState;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Objects;
 
 
 @Entity
@@ -34,26 +33,18 @@ public class Activity extends ParentEntity {
     private LocalDate time;
 
     @Column(name = "state", nullable = false)
-    private String state;
+    @Enumerated
+    private ActivityState state;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "fk_id_manager", nullable = false)
     private Manager manager;
 
-    @ManyToOne
-    @JoinColumn(name = "fk_id_sostav_lead")
-    private SostavLead sostavLead;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "fk_id_lead", nullable = false)
+    private Lead lead;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Activity activity = (Activity) o;
-        return id != null && Objects.equals(id, activity.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "fk_id_deal", referencedColumnName = "id")
+    private Deal deal;
 }

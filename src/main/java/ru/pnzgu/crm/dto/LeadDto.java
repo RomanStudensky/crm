@@ -17,5 +17,5 @@ public class LeadDto extends ParentDto implements Serializable {
     private String state;
     private String title;
     private OrderDto orders;
-    private List<SostavLeadDto> sostavLead = new ArrayList<>();
+    private List<ActivityDto> sostavLead = new ArrayList<>();
 }

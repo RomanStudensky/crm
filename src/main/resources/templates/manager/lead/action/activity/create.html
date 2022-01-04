@@ -27,7 +27,7 @@
 </nav>
 <div style="position: absolute; left: 50%; transform:translate(-50%, 0)">
     <div style="position: absolute; left: 50%; transform:translate(-50%, 0)">
-        <form th:method="POST" th:action="@{/manager/activity/{id}(id=${leadId}) }">
+        <form th:method="POST" th:action="@{/manager/activity/create/{id}(id=${leadId}) }">
 
             <div class="f">
                 <label for="title">Заголовок: </label>
@@ -54,6 +54,17 @@
                 <br/>
                 <input class="f" type="time" th:field="*{activity.time}" id="time"/>
                 <div style="color:red" th:if="${#fields.hasErrors('activity.time')}" th:errors="*{activity.time}">Email Error</div>
+            </div>
+            <br/>
+            <div class="f">
+                <label for="state">Выберите c: </label>
+                <br/>
+                <select id="state" style="width: 300px;" th:field="*{activity.state}" name="state" >
+                    <option th:each="state : ${states}"
+                            th:value="${state}"
+                            th:text="${state.getLabel()}">
+                    </option>
+                </select>
             </div>
             <br/>
             <div class="f">

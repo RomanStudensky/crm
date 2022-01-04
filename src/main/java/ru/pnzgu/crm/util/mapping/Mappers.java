@@ -14,6 +14,5 @@ public class Mappers {
     public static final SimpleMapper<ManagerDto, Manager> MANAGER = new SimpleMapper<>(new ManagerDto(), new Manager());
     public static final SimpleMapper<OrderDto, Order> ORDER = new SimpleMapper<>(new OrderDto(), new Order());
     public static final SimpleMapper<ProductDto, Product> PRODUCT = new SimpleMapper<>(new ProductDto(), new Product());
-    public static final SimpleMapper<SostavLeadDto, SostavLead> SOSTAV_LEAD = new SimpleMapper<>(new SostavLeadDto(), new SostavLead());
     public static final SimpleMapper<DealSostavDto, DealProduct> DEAL_PRODUCT = new SimpleMapper<>(new DealSostavDto(), new DealProduct());
 }

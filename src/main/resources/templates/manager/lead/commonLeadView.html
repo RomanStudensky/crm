@@ -162,23 +162,25 @@
         <thead>
             <tr>
                 <th>№ активности</th>
-                <th></th>
+                <th>Состояние</th>
+                <th>Заголовок</th>
                 <th>Дата</th>
-                <th>Время</th>
-                <th>Кол-во гостей</th>
+                <th>Время выполнения</th>
                 <th>Сделка</th>
                 <th class="_btn-active-table" colspan="2"><a th:href="@{/manager/activity/create/view/{id}(id=${leadId})}">Добавить запись</a></th>
             </tr>
         </thead>
         <div class="scroll-table-body">
             <tbody>
-                <tr th:each="sostav : ${sostavList}" >
-                    <th th:text="${sostav.getId()}"></th>
-                    <th th:text="${sostav.getActivity()}"></th>
-                    <th th:text="${sostav.getLead()}"></th>
-                    <th th:text="${sostav.getDeal() == null ? '' : sostav.getDeal().title}" th:style="${sostav.getDeal() != null ? 'background: #009900' : ''}"></th>
-                    <th class="_btn-active-table"><a th:href="@{/manager/activity/update/view/{id}(id=${sostav.getId()})}">Изменить</a></th>
-                    <th class="_btn-active-table"><a th:href="@{/manager/activity/delete/{id}(id=${sostav.getId()})}">Удалить</a></th>
+                <tr th:each="activity : ${activityList}" >
+                    <th th:text="${activity.getId()}"></th>
+                    <th th:text="${activity.getState()}"></th>
+                    <th th:text="${activity.getTitle()}"></th>
+                    <th th:text="${activity.getDate()}"></th>
+                    <th th:text="${activity.getTime()}"></th>
+                    <th th:text="${activity.getDeal() == null ? '' : activity.getDeal().title}" th:style="${activity.getDeal() != null ? 'background: #009900' : ''}"></th>
+                    <th class="_btn-active-table"><a th:href="@{/manager/activity/update/view/{id}(id=${activity.getId()})}">Изменить</a></th>
+                    <th class="_btn-active-table"><a th:href="@{/manager/activity/delete/{id}(id=${activity.getId()})}">Удалить</a></th>
                 </tr>
             </tbody>
         </div>
