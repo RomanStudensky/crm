@@ -4,14 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ru.pnzgu.crm.ActivityState;
 import ru.pnzgu.crm.dto.ActivityDto;
 import ru.pnzgu.crm.dto.LeadDto;
 import ru.pnzgu.crm.dto.ManagerDto;
-import ru.pnzgu.crm.dto.SostavLeadDto;
 import ru.pnzgu.crm.service.ActivityService;
 import ru.pnzgu.crm.service.LeadService;
 import ru.pnzgu.crm.service.ManagerService;
-import ru.pnzgu.crm.service.impl.SostavLeadService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +33,6 @@ public class LeadController {
     private final String REDIRECT_URL = "redirect:/manager/lead/%s";
     
     private final LeadService leadService;
-    private final SostavLeadService sostavLeadService;
     private final ActivityService activityService;
     private final ManagerService managerService;
 
@@ -42,10 +40,10 @@ public class LeadController {
     public String getCommonView(Model model) {
 
         List<LeadDto> leadList = leadService.readAll();
-        List<SostavLeadDto> sostavList = new ArrayList<>();
+        List<ActivityDto> activityList = new ArrayList<>();
 
         model.addAttribute("leadList", leadList);
-        model.addAttribute("sostavList", sostavList);
+        model.addAttribute("activityList", activityList);
 
         return COMMON_VIEW;
     }
@@ -55,10 +53,10 @@ public class LeadController {
 
 
         List<LeadDto> leadList = leadService.readAll();
-        List<SostavLeadDto> sostavList = sostavLeadService.readAllSostavByLeadId(leadId);
+        List<ActivityDto> activityList = activityService.readAllSostavByLeadId(leadId);
 
         model.addAttribute("leadList", leadList);
-        model.addAttribute("sostavList", sostavList);
+        model.addAttribute("activityList", activityList);
         model.addAttribute("leadId", leadId);
 
         return COMMON_VIEW;
@@ -78,6 +76,7 @@ public class LeadController {
         model.addAttribute("leadId", id);
         model.addAttribute("manager", new ManagerDto());
         model.addAttribute("managerList", managerService.readAll());
+        model.addAttribute("states", List.of(ActivityState.values()));
 
         return ACTIVITY_CREATE_VIEW;
     }
@@ -89,29 +88,32 @@ public class LeadController {
         model.addAttribute("activityId", id);
         model.addAttribute("manager", activityDto.getManager());
         model.addAttribute("managerList", managerService.readAll());
+        model.addAttribute("states", List.of(ActivityState.values()));
 
         return ACTIVITY_UPDATE_VIEW;
     }
 
-    // ------------- REST ------------
-
-    @PostMapping("/activity/create/{leadId}")
-    public String createLead(@ModelAttribute ActivityDto activityDto, ManagerDto managerDto, Long leadId) {
-        activityDto = activityService.create(activityDto, managerDto.getId());
-
-        return String.format(REDIRECT_URL, activityDto.getId());
-    }
-
-    @PostMapping("/activity/update/{id}")
-    public String updateActivity(@PathVariable Long id, @ModelAttribute ActivityDto activityDto) {
-        activityService.update(id, activityDto);
-
-        return String.format(REDIRECT_URL, id);
-    }
+    // ------------- REST -------------
 
     @PostMapping("/lead/update/{id}")
     public String updateLead(@PathVariable Long id, @ModelAttribute LeadDto LeadDto) {
         leadService.update(id, LeadDto);
+
+        return String.format(REDIRECT_URL, id);
+    }
+
+    @PostMapping("/activity/create/{leadId}")
+    public String createLead(@ModelAttribute(name = "activity") ActivityDto activity,
+                             @ModelAttribute(name = "manager") ManagerDto manager,
+                             @PathVariable Long leadId) {
+        activity = activityService.create(activity, manager.getId(), leadId);
+
+        return String.format(REDIRECT_URL, activity.getId());
+    }
+
+    @PostMapping("/activity/update/{id}")
+    public String updateActivity(@PathVariable Long id, @ModelAttribute ActivityDto activity) {
+        activityService.update(id, activity);
 
         return String.format(REDIRECT_URL, id);
     }

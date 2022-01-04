@@ -32,9 +32,6 @@ public class Deal extends ParentEntity {
     @JoinColumn(name = "fk_id_dogovor", nullable = false)
     private Dogovor dogovor;
 
-    @ManyToOne
-    @JoinColumn(name = "fk_id_sostav_lead")
-    private SostavLead sostavLead;
-
-
+    @OneToOne(mappedBy = "deal")
+    private Activity activity;
 }

@@ -31,7 +31,5 @@ public class Lead extends ParentEntity {
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_id_lead")
-    List<SostavLead> sostavLead = new ArrayList<>();
-
-
+    List<Activity> activities = new ArrayList<>();
 }
