@@ -3,6 +3,7 @@ package ru.pnzgu.crm.store.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ru.pnzgu.crm.store.states.LeadState;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -20,7 +21,8 @@ public class Lead extends ParentEntity {
     private Long id;
 
     @Column(name = "state", nullable = false)
-    private String state;
+    @Enumerated(EnumType.STRING)
+    private LeadState state;
 
     @Column(name = "title", nullable = false)
     private String title;

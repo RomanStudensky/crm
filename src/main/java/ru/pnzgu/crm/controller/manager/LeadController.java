@@ -4,13 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.pnzgu.crm.ActivityState;
 import ru.pnzgu.crm.dto.ActivityDto;
 import ru.pnzgu.crm.dto.LeadDto;
 import ru.pnzgu.crm.dto.ManagerDto;
 import ru.pnzgu.crm.service.ActivityService;
 import ru.pnzgu.crm.service.LeadService;
 import ru.pnzgu.crm.service.ManagerService;
+import ru.pnzgu.crm.store.states.ActivityState;
+import ru.pnzgu.crm.store.states.LeadState;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,6 +67,8 @@ public class LeadController {
     public String getLeadUpdateView(@PathVariable Long id, Model model) {
         LeadDto leadDto = leadService.read(id);
         model.addAttribute("lead", leadDto);
+        model.addAttribute("leadId", id);
+        model.addAttribute("states", List.of(LeadState.values()));
 
         return LEAD_UPDATE_VIEW;
     }
@@ -106,15 +109,19 @@ public class LeadController {
     public String createLead(@ModelAttribute(name = "activity") ActivityDto activity,
                              @ModelAttribute(name = "manager") ManagerDto manager,
                              @PathVariable Long leadId) {
-        activity = activityService.create(activity, manager.getId(), leadId);
 
-        return String.format(REDIRECT_URL, activity.getId());
+        activityService.create(activity, manager.getId(), leadId);
+
+        return String.format(REDIRECT_URL, leadId);
     }
 
     @PostMapping("/activity/update/{id}")
-    public String updateActivity(@PathVariable Long id, @ModelAttribute ActivityDto activity) {
-        activityService.update(id, activity);
+    public String updateActivity(@PathVariable Long id,
+                                 @ModelAttribute ActivityDto activity,
+                                 @ModelAttribute ManagerDto manager) {
 
-        return String.format(REDIRECT_URL, id);
+        ActivityDto activityDto = activityService.update(id, activity, manager.getId());
+
+        return String.format(REDIRECT_URL, activityDto.getLead().getId());
     }
 }

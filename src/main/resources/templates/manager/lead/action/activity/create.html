@@ -39,7 +39,7 @@
             <div class="f">
                 <label for="description">Описание: </label>
                 <br/>
-                <textarea class="f" th:content="*{activity.description}" id="description" maxlength="255"></textarea>
+                <textarea class="f" th:field="*{activity.description}" id="description" maxlength="255"></textarea>
                 <div style="color:red" th:if="${#fields.hasErrors('activity.description')}" th:errors="*{activity.description}">Age Error</div>
             </div>
             <br/>
@@ -57,7 +57,7 @@
             </div>
             <br/>
             <div class="f">
-                <label for="state">Выберите c: </label>
+                <label for="state">Выберите состояние активности: </label>
                 <br/>
                 <select id="state" style="width: 300px;" th:field="*{activity.state}" name="state" >
                     <option th:each="state : ${states}"
@@ -70,9 +70,9 @@
             <div class="f">
                 <label for="manager">Выберите менеджера: </label>
                 <br/>
-                <select id="manager" style="width: 300px;" th:field="*{manager}" name="manager" >
+                <select id="manager" style="width: 300px;" th:field="*{manager.id}" name="manager" >
                     <option th:each="manag : ${managerList}"
-                            th:value="${manag}"
+                            th:value="${manag.getId()}"
                             th:text="${manag.getFullName()}">
                     </option>
                 </select>

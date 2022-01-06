@@ -26,29 +26,22 @@
 </nav>
 <div style="position: absolute; left: 50%; transform:translate(-50%, 0)">
     <div style="position: absolute; left: 50%; transform:translate(-50%, 0)">
-        <form th:method="POST" th:action="@{/admin/reserv/update/{id}(id=${reservId})}">
+        <form th:method="POST" th:action="@{/manager/lead/update/{id}(id=${leadId})}">
             <div class="f">
-                <label for="fullName">Введите ФИО: </label>
-                <input type="text" th:field="*{reserv.fullName}" id="fullName" />
-                <div style="color:red" th:if="${#fields.hasErrors('reserv.fullName')}" th:errors="*{reserv.fullName}">Name Error</div>
+                <label for="title">Заголовок лида: </label>
+                <input type="text" th:field="*{lead.title}" id="title" />
+                <div style="color:red" th:if="${#fields.hasErrors('lead.title')}" th:errors="*{lead.title}">Name Error</div>
             </div>
             <br/>
             <div class="f">
-                <label for="dateReserv">Введите дату брони: </label>
-                <input class="f" type="text" th:field="*{reserv.dateReserv}" id="dateReserv"/>
-                <div style="color:red" th:if="${#fields.hasErrors('reserv.dateReserv')}" th:errors="*{reserv.dateReserv}">Age Error</div>
-            </div>
-            <br/>
-            <div class="f">
-                <label for="timeReserv">Введите время брони: </label>
-                <input class="f" type="time" th:field="*{reserv.timeReserv}" id="timeReserv"/>
-                <div style="color:red" th:if="${#fields.hasErrors('reserv.timeReserv')}" th:errors="*{reserv.timeReserv}">Email Error</div>
-            </div>
-            <br/>
-            <div class="f">
-                <label for="countPeople">Введите кол-во людей: </label>
-                <input class="f" type="text" th:field="*{reserv.countPeople}" id="countPeople"/>
-                <div style="color:red" th:if="${#fields.hasErrors('reserv.countPeople')}" th:errors="*{reserv.countPeople}">Email Error</div>
+                <label for="state">Выберите состояние активности: </label>
+                <br/>
+                <select id="state" style="width: 300px;" th:field="*{lead.state}" name="state" >
+                    <option th:each="state : ${states}"
+                            th:value="${state}"
+                            th:text="${state.getLabel()}">
+                    </option>
+                </select>
             </div>
     
             <br/>

@@ -17,8 +17,6 @@ import ru.pnzgu.crm.util.mapping.Mappers;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static java.util.Objects.requireNonNull;
-
 @Service
 @RequiredArgsConstructor
 public class ActivityServiceImpl implements ActivityService {
@@ -40,49 +38,47 @@ public class ActivityServiceImpl implements ActivityService {
     public ActivityDto read(Long id) {
         return Mappers
                 .ACTIVITY
-                .mapEntityToDto(activityRepository
-                                .findById(id)
-                                .orElseThrow(() -> new NotFoundException(String.format(MessageConst.ACTIVITY, id))));
+                .mapEntityToDto(getActivityById(id));
     }
 
     @Override
     public ActivityDto create(ActivityDto activityDto, Long managerId, Long leadId) {
-        requireNonNull(activityDto, "activityDto is null!");
-        requireNonNull(activityDto, "managerId is null!");
-        requireNonNull(activityDto, "leadId is null!");
 
-        Manager manager =
-                managerRepository
-                        .findById(managerId)
-                        .orElseThrow(() -> new NotFoundException(String.format(MessageConst.MANAGER, managerId)));
-        Lead lead =
-                leadRepository
-                        .findById(leadId)
-                        .orElseThrow(() -> new NotFoundException(String.format(MessageConst.LEAD, leadId)));
+        Manager manager = getManagerById(managerId);
+
+        Lead lead = getLeadById(leadId);
 
         Activity activity = Mappers.ACTIVITY.mapDtoToEntity(activityDto);
-
+        activity.setId(null);
         activity.setManager(manager);
         activity.setLead(lead);
 
         activityDto = Mappers
                 .ACTIVITY
                 .mapEntityToDto(
-                        activityRepository.save(activity)
+                        activityRepository.saveAndFlush(activity)
                 );
 
         return activityDto;
     }
 
-    @Override
-    public ActivityDto update(Long id, ActivityDto activityDto) {
+    private Lead getLeadById(Long leadId) {
+        return leadRepository
+                .findById(leadId)
+                .orElseThrow(() -> new NotFoundException(MessageConst.LEAD));
+    }
 
-        activityRepository
-                .findById(id)
-                .orElseThrow(() -> new NotFoundException(String.format(MessageConst.ACTIVITY, id)));
+    @Override
+    public ActivityDto update(Long id, ActivityDto activityDto, Long managerId) {
+
+        Lead lead = getActivityById(id).getLead();
+
+        Manager manager = getManagerById(managerId);
 
         Activity activity = Mappers.ACTIVITY.mapDtoToEntity(activityDto);
         activity.setId(id);
+        activity.setManager(manager);
+        activity.setLead(lead);
 
         return Mappers
                 .ACTIVITY
@@ -94,9 +90,21 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public List<ActivityDto> readAllSostavByLeadId(Long leadId) {
         return activityRepository
-                .findByLeadId(leadId)
+                .findActivitiesByLeadId(leadId)
                 .stream()
                 .map(Mappers.ACTIVITY::mapEntityToDto)
                 .collect(Collectors.toList());
+    }
+
+    private Activity getActivityById(Long id) {
+        return activityRepository
+                .findById(id)
+                .orElseThrow(() -> new NotFoundException(String.format(MessageConst.ACTIVITY, id)));
+    }
+
+    private Manager getManagerById(Long managerId) {
+        return managerRepository
+                .findById(managerId)
+                .orElseThrow(() -> new NotFoundException(String.format(MessageConst.MANAGER, managerId)));
     }
 }

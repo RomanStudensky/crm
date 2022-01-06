@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ru.pnzgu.crm.store.states.DealState;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -17,5 +18,6 @@ public class DealDto extends ParentDto implements Serializable {
     private String title;
     private List<ProductDto> products = new ArrayList<>();
     private DogovorDto dogovor;
+    private DealState state;
     private List<DealSostavDto> sostav = new ArrayList<>();
 }

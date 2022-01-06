@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" class="h-100">
+<html xmlns:th="http://www.thymeleaf.org" class="h-100" lang="ru">
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -135,7 +135,7 @@
                     <div th:if="${lead.getId() == leadId}">
                         <th style="background-color: #efefef" th:text="${lead.getId()}"></th>
                         <th style="background-color: #efefef" th:text="${lead.getTitle()}"></th>
-                        <th style="background-color: #efefef" th:text="${lead.getState()}"></th>
+                        <th style="background-color: #efefef" th:text="${lead.getState().getLabel()}"></th>
                         <th style="background-color: #efefef" th:text="${lead.getOrders().getId()}"></th>
                         <th class="_btn-active-table"><a th:href="@{/manager/lead/{id}(id=${lead.getId()})}">Активности</a></th>
                         <th class="_btn-active-table"><a th:href="@{/manager/lead/update/view/{id}(id=${lead.getId()})}">Редактировать</a></th>
@@ -144,7 +144,7 @@
                     <div th:unless="${lead.getId == leadId}">
                         <th th:text="${lead.getId()}"></th>
                         <th th:text="${lead.getTitle()}"></th>
-                        <th th:text="${lead.getState()}"></th>
+                        <th th:text="${lead.getState().getLabel()}"></th>
                         <th th:text="${lead.getOrders().getId()}"></th>
                         <th class="_btn-active-table"><a th:href="@{/manager/lead/{id}(id=${lead.getId()})}">Активности</a></th>
                         <th class="_btn-active-table"><a th:href="@{/manager/lead/update/view/{id}(id=${lead.getId()})}">Редактировать</a></th>
@@ -174,7 +174,7 @@
             <tbody>
                 <tr th:each="activity : ${activityList}" >
                     <th th:text="${activity.getId()}"></th>
-                    <th th:text="${activity.getState()}"></th>
+                    <th th:text="${activity.getState().getLabel()}"></th>
                     <th th:text="${activity.getTitle()}"></th>
                     <th th:text="${activity.getDate()}"></th>
                     <th th:text="${activity.getTime()}"></th>

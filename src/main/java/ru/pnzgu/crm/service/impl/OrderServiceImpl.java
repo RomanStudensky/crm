@@ -13,6 +13,7 @@ import ru.pnzgu.crm.store.entity.Order;
 import ru.pnzgu.crm.store.repository.ContactRepository;
 import ru.pnzgu.crm.store.repository.LeadRepository;
 import ru.pnzgu.crm.store.repository.OrderRepository;
+import ru.pnzgu.crm.store.states.LeadState;
 import ru.pnzgu.crm.util.mapping.Mappers;
 
 import java.util.List;
@@ -70,7 +71,7 @@ public class OrderServiceImpl implements OrderService {
                         orderDto.getOrigin())
         );
 
-        lead.setState("Создан");
+        lead.setState(LeadState.CREATED);
         lead = leadRepository.save(lead);
 
         Order order = Mappers.ORDER.mapDtoToEntity(orderDto);

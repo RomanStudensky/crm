@@ -12,7 +12,7 @@ public interface ActivityService {
 
     ActivityDto create(ActivityDto activityDto, Long managerId, Long leadId);
 
-    ActivityDto update(Long id, ActivityDto activityDto);
+    ActivityDto update(Long id, ActivityDto activityDto, Long managerId);
 
     List<ActivityDto> readAllSostavByLeadId(Long leadId);
 }

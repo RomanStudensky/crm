@@ -7,6 +7,7 @@ import ru.pnzgu.crm.exception.NotFoundException;
 import ru.pnzgu.crm.exception.util.MessageConst;
 import ru.pnzgu.crm.service.LeadService;
 import ru.pnzgu.crm.store.entity.Lead;
+import ru.pnzgu.crm.store.entity.Order;
 import ru.pnzgu.crm.store.repository.LeadRepository;
 import ru.pnzgu.crm.util.mapping.Mappers;
 
@@ -38,12 +39,14 @@ public class LeadServiceImpl implements LeadService {
 
     @Override
     public LeadDto update(Long id, LeadDto leadDto) {
-        leadRepository
+        Order order = leadRepository
                 .findById(id)
-                .orElseThrow(() -> new NotFoundException(String.format(MessageConst.ACTIVITY, id)));
+                .orElseThrow(() -> new NotFoundException(String.format(MessageConst.ACTIVITY, id)))
+                .getOrders();
 
         Lead lead = Mappers.LEAD.mapDtoToEntity(leadDto);
         lead.setId(id);
+        lead.setOrders(order);
 
         return Mappers
                 .LEAD

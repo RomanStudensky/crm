@@ -15,9 +15,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DogovorController {
 
-    private final String COMMON_VIEW = "/templates/director/dogovor/commonDogovorView";
-    private final String CREATE_VIEW = "/templates/director/dogovor/action/create";
-    private final String UPDATE_VIEW = "/templates/director/dogovor/action/update";
+    private final String COMMON_VIEW = "/director/dogovor/commonDogovorView";
+    private final String CREATE_VIEW = "/director/dogovor/action/create";
+    private final String UPDATE_VIEW = "/director/dogovor/action/update";
     private final String REDIRECT_URL = "redirect:/director/dogovor/%s";
 
     private final DogovorService dogovorService;

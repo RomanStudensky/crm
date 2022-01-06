@@ -3,6 +3,7 @@ package ru.pnzgu.crm.store.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ru.pnzgu.crm.store.states.DealState;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -22,8 +23,9 @@ public class Deal extends ParentEntity {
     @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "approved", nullable = false)
-    private boolean approved;
+    @Column(name = "state", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private DealState state;
 
     @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, mappedBy = "deal")
     private List<DealProduct> sostav = new ArrayList<>();

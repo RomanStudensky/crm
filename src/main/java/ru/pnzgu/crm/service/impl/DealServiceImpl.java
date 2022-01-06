@@ -3,7 +3,6 @@ package ru.pnzgu.crm.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.pnzgu.crm.ActivityState;
 import ru.pnzgu.crm.dto.DealDto;
 import ru.pnzgu.crm.dto.ProductDto;
 import ru.pnzgu.crm.exception.NotFoundException;
@@ -16,7 +15,8 @@ import ru.pnzgu.crm.store.entity.Dogovor;
 import ru.pnzgu.crm.store.repository.ActivityRepository;
 import ru.pnzgu.crm.store.repository.DealRepository;
 import ru.pnzgu.crm.store.repository.DogovorRepository;
-import ru.pnzgu.crm.store.repository.LeadRepository;
+import ru.pnzgu.crm.store.states.ActivityState;
+import ru.pnzgu.crm.store.states.DealState;
 import ru.pnzgu.crm.util.mapping.Mappers;
 
 import java.util.Collection;
@@ -30,7 +30,6 @@ public class DealServiceImpl implements DealService {
 
     private final DealRepository dealRepository;
     private final DogovorRepository dogovorRepository;
-    private final LeadRepository leadRepository;
     private final ActivityRepository activityRepository;
 
     @Override
@@ -74,10 +73,9 @@ public class DealServiceImpl implements DealService {
      * @param dogovorId идентификатор договора
      * @return сохраненная сделка
      */
-    @Override
     @Transactional
+    @Override
     public DealDto create(DealDto dealDto, Long leadId, Long dogovorId) {
-
         Dogovor dogovor = dogovorRepository
                         .findById(dogovorId)
                         .orElseThrow(() -> new NotFoundException(String.format(MessageConst.DOGOVOR, dogovorId)));
@@ -85,7 +83,7 @@ public class DealServiceImpl implements DealService {
         // создаём и сохраняем сделку
         Deal deal = Mappers.DEAL.mapDtoToEntity(dealDto);
         deal.setDogovor(dogovor);
-        deal.setApproved(false);
+        deal.setState(DealState.OPEN);
         dealDto = Mappers.DEAL.mapEntityToDto(dealRepository.saveAndFlush(deal));
 
         // находим последнюю активность у лида с идентификатором - leadId, иначе создаём новую активность
@@ -110,10 +108,7 @@ public class DealServiceImpl implements DealService {
 
     @Override
     public DealDto update(Long id, DealDto dealDto) {
-        Deal deal =
-                dealRepository
-                        .findById(id)
-                        .orElseThrow(() -> new NotFoundException(String.format(MessageConst.DEAL, id)));
+        Deal deal = getDealById(id);
 
         deal.setTitle(dealDto.getTitle());
 
@@ -132,7 +127,34 @@ public class DealServiceImpl implements DealService {
     @Override
     public Long readLeadIdByDealId(Long dealId) {
         return dealRepository
-                .findAllByDealId(dealId)
-                .stream().findFirst().orElseThrow(() -> new NotFoundException(String.format(MessageConst.DEAL, dealId)));
+                .findLeadByDealId(dealId)
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new NotFoundException(String.format("Не удалось найти лид по сделке с идентификатором - %s ", dealId)));
     }
+
+    @Transactional
+    @Override
+    public void approveDealById(Long id) {
+        Deal deal = getDealById(id);
+
+        deal.setState(DealState.APPROVE);
+        dealRepository.saveAndFlush(deal);
+    }
+
+    @Transactional
+    @Override
+    public void closeDealById(Long id) {
+        Deal deal = getDealById(id);
+
+        deal.setState(DealState.CLOSE);
+        dealRepository.saveAndFlush(deal);
+    }
+
+    private Deal getDealById(Long id) {
+        return dealRepository
+                .findById(id)
+                .orElseThrow(() -> new NotFoundException(String.format(MessageConst.DEAL, id)));
+    }
+
 }

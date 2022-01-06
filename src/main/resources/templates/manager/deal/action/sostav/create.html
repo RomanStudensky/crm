@@ -26,19 +26,20 @@
 </nav>
 <div style="position: absolute; left: 50%; transform:translate(-50%, 0)">
     <div style="position: absolute; left: 50%; transform:translate(-50%, 0)">
-        <form th:method="POST" th:action="@{/admin/stol/create}">
+        <br>
+        <form th:method="POST" th:action="@{/manager/deal/create/sostav/{id}(id=${dealId})}">
             <div class="field">
-                <label for="countPlace">Колво мест: </label>
-                <input type="number" th:field="*{stol.countPlace}" id="countPlace" />
-                <div style="color:red" th:if="${#fields.hasErrors('stol.countPlace')}" th:errors="*{stol.countPlace}">Name Error</div>
+                <label for="count">Кол-во: </label>
+                <input type="number" th:field="*{sostav.count}" id="count" />
+                <div style="color:red" th:if="${#fields.hasErrors('sostav.count')}" th:errors="*{sostav.count}">Name Error</div>
             </div>
 
             <div class="f">
                 <label for="role">Выберите продукт: </label>
                 <br/>
-                <select id="role" style="width: 300px;" th:field="*{product}" name="role" >
+                <select id="role" style="width: 300px;" th:field="*{product.id}" name="role" >
                     <option th:each="prod : ${productList}"
-                            th:value="${prod}"
+                            th:value="${prod.id}"
                             th:text="${prod.getName()}">
                     </option>
 

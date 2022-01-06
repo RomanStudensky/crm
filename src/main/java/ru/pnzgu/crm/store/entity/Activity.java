@@ -3,10 +3,11 @@ package ru.pnzgu.crm.store.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ru.pnzgu.crm.ActivityState;
+import ru.pnzgu.crm.store.states.ActivityState;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 
 @Entity
@@ -30,17 +31,17 @@ public class Activity extends ParentEntity {
     private LocalDate date;
 
     @Column(name = "time", nullable = false)
-    private LocalDate time;
+    private LocalTime time;
 
     @Column(name = "state", nullable = false)
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private ActivityState state;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "fk_id_manager", nullable = false)
     private Manager manager;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "fk_id_lead", nullable = false)
     private Lead lead;
 

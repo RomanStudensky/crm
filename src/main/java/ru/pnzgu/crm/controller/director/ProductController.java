@@ -14,9 +14,9 @@ import java.util.List;
 @RequestMapping("/director/product")
 @RequiredArgsConstructor
 public class ProductController {
-    private final String COMMON_VIEW = "/templates/director/product/commonProductView";
-    private final String CREATE_VIEW = "/templates/director/product/action/create";
-    private final String UPDATE_VIEW = "/templates/director/product/action/update";
+    private final String COMMON_VIEW = "/director/product/commonProductView";
+    private final String CREATE_VIEW = "/director/product/action/create";
+    private final String UPDATE_VIEW = "/director/product/action/update";
     private final String REDIRECT_URL = "redirect:/director/product/%s";
 
     private final ProductService productService;

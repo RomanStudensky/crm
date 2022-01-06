@@ -10,13 +10,14 @@ import java.util.Optional;
 public interface DealRepository extends JpaRepository<Deal, Long> {
     @Query(nativeQuery = true,
             value = "select * from deal " +
-                    "join sostav_lead sl " +
-                    "on deal.id = sl.fk_id_deal and sl.fk_id_lead = ?1")
+                    "join activity a " +
+                    "on deal.id = a.fk_id_deal and a.fk_id_lead = ?1")
     List<Deal> findAllByLeadId(Long leadId);
 
     @Query(nativeQuery = true,
-            value = "select id from lead " +
-                    "join sostav_lead sl " +
-                    "on sl.fk_id_deal = ?1")
-    Optional<Long> findAllByDealId(Long dealId);
+            value = "select l.id " +
+                    "from lead as l " +
+                    "join activity a " +
+                    "on a.fk_id_deal = ?1 and l.id = a.fk_id_lead")
+    Optional<Long> findLeadByDealId(Long dealId);
 }

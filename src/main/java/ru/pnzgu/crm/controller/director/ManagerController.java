@@ -14,9 +14,9 @@ import java.util.List;
 @RequestMapping("/director/manager")
 @RequiredArgsConstructor
 public class ManagerController {
-    private final String COMMON_VIEW = "/templates/director/manager/commonManagerView";
-    private final String CREATE_VIEW = "/templates/director/manager/action/create";
-    private final String UPDATE_VIEW = "/templates/director/manager/action/update";
+    private final String COMMON_VIEW = "/director/manager/commonManagerView";
+    private final String CREATE_VIEW = "/director/manager/action/create";
+    private final String UPDATE_VIEW = "/director/manager/action/update";
     private final String REDIRECT_URL = "redirect:/director/manager/%s";
 
     private final ManagerService managerService;
@@ -37,7 +37,6 @@ public class ManagerController {
 
         List<ManagerDto> ManagerDtoList = new ArrayList<>();
         model.addAttribute("managerList", ManagerDtoList);
-        model.addAttribute("managerId", managerId);
 
         return COMMON_VIEW;
     }

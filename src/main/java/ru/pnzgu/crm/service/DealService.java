@@ -19,4 +19,8 @@ public interface DealService {
     List<DealDto> readAllByLeadId(Long leadId);
 
     Long readLeadIdByDealId(Long dealdId);
+
+    void approveDealById(Long id);
+
+    void closeDealById(Long id);
 }
