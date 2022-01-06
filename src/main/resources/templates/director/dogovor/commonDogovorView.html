@@ -122,28 +122,19 @@
     <table>
         <thead>
             <tr>
-                <th>№ стола</th>
-                <th>Кол-во мест</th>
-                <th class="_btn-active-table" colspan="3" style="text-align: center;"><a th:href="@{/admin/stol/create/view}">Добавить запись</a></th>
+                <th>№ договора</th>
+                <th>Название</th>
+                <th class="_btn-active-table" colspan="2" style="text-align: center;"><a th:href="@{/director/dogovor/create/view}">Добавить запись</a></th>
             </tr>
         </thead>
         <div class="scroll-table-body">
             <tbody>
-                <tr th:each="stol : ${stolList}">
-                    <div th:if="${stol.getId == stolId}">
-                        <th style="background-color: #efefef" th:text="${stol.getId()}"></th>
-                        <th style="background-color: #efefef" th:text="${stol.getCountPlace()}"></th>
-                        <th class="_btn-active-table"><a th:href="@{/admin/{id}(id=${stol.getId()})}">Брони</a></th>
-                        <th class="_btn-active-table"><a th:href="@{/admin/stol/update/view/{id}(id=${stol.getId()})}">Изменить</a></th>
-                        <th class="_btn-active-table"><a th:href="@{/admin/stol/delete/{id}(id=${stol.getId()})}">Удалить</a></th>
-                    </div>
-
-                    <div th:unless="${stol.getId == stolId}">
-                        <th th:text="${stol.getId()}"></th>
-                        <th th:text="${stol.getCountPlace()}"></th>
-                        <th class="_btn-active-table"><a th:href="@{/admin/{id}(id=${stol.getId()})}">Брони</a></th>
-                        <th class="_btn-active-table"><a th:href="@{/admin/stol/update/view/{id}(id=${stol.getId()})}">Изменить</a></th>
-                        <th class="_btn-active-table"> <a th:href="@{/admin/stol/delete/{id}(id=${stol.getId()})}">Удалить</a></th>
+                <tr th:each="dogovor : ${dogovorList}">
+                    <div>
+                        <th style="background-color: #efefef" th:text="${dogovor.getId()}"></th>
+                        <th style="background-color: #efefef" th:text="${dogovor.getTitle()}"></th>
+                        <th class="_btn-active-table"><a th:href="@{/director/dogovor/update/view/{id}(id=${dogovor.getId()})}">Изменить</a></th>
+                        <th class="_btn-active-table"><a th:href="@{/director/dogovor/delete/{id}(id=${dogovor.getId()})}">Удалить</a></th>
                     </div>
                 </tr>
             </tbody>
@@ -151,35 +142,5 @@
     </table>
 </div>
 
-<br/>
-
-<div class="scroll-table">
-    <table>
-        <thead>
-            <tr>
-                <th>№</th>
-                <th>ФИО клиента</th>
-                <th>Дата</th>
-                <th>Время</th>
-                <th>Кол-во гостей</th>
-                <th class="_btn-active-table" colspan="2"><a th:href="@{/admin/reserv/create/view/{id}(id=${stolId})}">Добавить запись</a></th>
-            </tr>
-        </thead>
-        <div class="scroll-table-body">
-            <tbody>
-                <tr th:each="reserv : ${reservList}" >
-
-                    <th th:text="${reserv.getId()}"></th>
-                    <th th:text="${reserv.getFullName()}"></th>
-                    <th th:text="${reserv.getDateReserv()}"></th>
-                    <th th:text="${reserv.getTimeReserv()}"></th>
-                    <th th:text="${reserv.getCountPeople()}"></th>
-                    <th class="_btn-active-table"><a th:href="@{/admin/reserv/update/view/{id}(id=${reserv.getId()})}">Изменить</a></th>
-                    <th class="_btn-active-table"><a th:href="@{/admin/reserv/delete/{id}(id=${reserv.getId()})}">Удалить</a></th>
-                </tr>
-            </tbody>
-        </div>
-    </table>
-</div>
 </body>
 </html>

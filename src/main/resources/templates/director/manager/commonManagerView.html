@@ -122,28 +122,21 @@
     <table>
         <thead>
             <tr>
-                <th>№ стола</th>
-                <th>Кол-во мест</th>
-                <th class="_btn-active-table" colspan="3" style="text-align: center;"><a th:href="@{/director/manager/create/view}">Добавить запись</a></th>
+                <th>№ менедженра</th>
+                <th>ФИО</th>
+                <th>Телефонный номер</th>
+                <th class="_btn-active-table" colspan="2" style="text-align: center;"><a th:href="@{/director/manager/create/view}">Добавить запись</a></th>
             </tr>
         </thead>
         <div class="scroll-table-body">
             <tbody>
                 <tr th:each="manager : ${managerList}">
-                    <div th:if="${manager.getId == stolId}">
-                        <th style="background-color: #efefef" th:text="${stol.getId()}"></th>
-                        <th style="background-color: #efefef" th:text="${stol.getCountPlace()}"></th>
-                        <th class="_btn-active-table"><a th:href="@{/admin/{id}(id=${stol.getId()})}">Брони</a></th>
-                        <th class="_btn-active-table"><a th:href="@{/admin/stol/update/view/{id}(id=${stol.getId()})}">Изменить</a></th>
-                        <th class="_btn-active-table"><a th:href="@{/admin/stol/delete/{id}(id=${stol.getId()})}">Удалить</a></th>
-                    </div>
-
-                    <div th:unless="${stol.getId == stolId}">
-                        <th th:text="${stol.getId()}"></th>
-                        <th th:text="${stol.getCountPlace()}"></th>
-                        <th class="_btn-active-table"><a th:href="@{/admin/{id}(id=${stol.getId()})}">Брони</a></th>
-                        <th class="_btn-active-table"><a th:href="@{/admin/stol/update/view/{id}(id=${stol.getId()})}">Изменить</a></th>
-                        <th class="_btn-active-table"> <a th:href="@{/admin/stol/delete/{id}(id=${stol.getId()})}">Удалить</a></th>
+                    <div>
+                        <th style="background-color: #efefef" th:text="${manager.getId()}"></th>
+                        <th style="background-color: #efefef" th:text="${manager.getFullName()}"></th>
+                        <th style="background-color: #efefef" th:text="${manager.getPhone()}"></th>
+                        <th class="_btn-active-table"><a th:href="@{/director/manager/update/view/{id}(id=${manager.getId()})}">Изменить</a></th>
+                        <th class="_btn-active-table"><a th:href="@{/director/manager/delete/{id}(id=${manager.getId()})}">Удалить</a></th>
                     </div>
                 </tr>
             </tbody>

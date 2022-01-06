@@ -7,9 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.pnzgu.crm.dto.ManagerDto;
 import ru.pnzgu.crm.service.ManagerService;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Controller
 @RequestMapping("/director/manager")
 @RequiredArgsConstructor
@@ -17,7 +14,7 @@ public class ManagerController {
     private final String COMMON_VIEW = "/director/manager/commonManagerView";
     private final String CREATE_VIEW = "/director/manager/action/create";
     private final String UPDATE_VIEW = "/director/manager/action/update";
-    private final String REDIRECT_URL = "redirect:/director/manager/%s";
+    private final String REDIRECT_URL = "redirect:/director/manager";
 
     private final ManagerService managerService;
 
@@ -25,21 +22,12 @@ public class ManagerController {
     public String getCommonView(Model model) {
         model.addAttribute("managerList", managerService.readAll());
 
-        List<ManagerDto> managerList = new ArrayList<>();
-        model.addAttribute("managerList", managerList);
-
-        return COMMON_VIEW;
-    }
-
-    @GetMapping("/{managerId}")
-    public String getCommonView(@PathVariable Long managerId, Model model) {
         model.addAttribute("managerList", managerService.readAll());
 
-        List<ManagerDto> ManagerDtoList = new ArrayList<>();
-        model.addAttribute("managerList", ManagerDtoList);
-
         return COMMON_VIEW;
     }
+
+
 
     @GetMapping("/create/view")
     public String getManagerCreateView(Model model) {
@@ -60,16 +48,15 @@ public class ManagerController {
 
     @PostMapping("/create")
     public String createManager(@ModelAttribute ManagerDto ManagerDto) {
-        ManagerDto = managerService.create(ManagerDto);
+        managerService.create(ManagerDto);
 
-        return String.format(REDIRECT_URL, ManagerDto.getId());
+        return REDIRECT_URL;
     }
 
     @PostMapping("/update/{id}")
     public String updateManager(@PathVariable Long id, @ModelAttribute ManagerDto ManagerDto) {
         managerService.update(id, ManagerDto);
 
-        return String.format(REDIRECT_URL, id);
+        return REDIRECT_URL;
     }
-
 }

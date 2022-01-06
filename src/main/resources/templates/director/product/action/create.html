@@ -25,38 +25,29 @@
         </div>
     </div>
 </nav>
-<div style="position: absolute; left: 50%; transform:translate(-50%, 0)">
-    <div style="position: absolute; left: 50%; transform:translate(-50%, 0)">
-        <form th:method="POST" th:action="@{/admin/reserv/create/{id}(id=${stolId}) }">
-
-            <div class="f">
-                <label for="fullName">Введите ФИО: </label>
-                <input type="text" th:field="*{reserv.fullName}" id="fullName" />
-                <div style="color:red" th:if="${#fields.hasErrors('reserv.fullName')}" th:errors="*{reserv.fullName}">Name Error</div>
-            </div>
+<div class="align-middle" style="top:10%; position: absolute; left: 50%; transform:translate(-50%, 0)">
+    <form th:method="POST" th:action="@{/director/product/create}">
+        <div class="f">
+            <label for="name">Наименование </label>
+            <input type="text" th:field="*{product.name}" id="name" />
+            <div style="color:red" th:if="${#fields.hasErrors('product.name')}" th:errors="*{product.name}">Name Error</div>
+        </div>
+        <br>
+        <div class="f">
+            <label for="description">Описание: </label>
             <br/>
-            <div class="f">
-                <label for="dateReserv">Введите дату брони: </label>
-                <input class="f" type="date" th:field="*{reserv.dateReserv}" id="dateReserv"/>
-                <div style="color:red" th:if="${#fields.hasErrors('reserv.dateReserv')}" th:errors="*{reserv.dateReserv}">Age Error</div>
-            </div>
-            <br/>
-            <div class="f">
-                <label for="timeReserv">Введите время брони: </label>
-                <input class="f" type="time" th:field="*{reserv.timeReserv}" id="timeReserv"/>
-                <div style="color:red" th:if="${#fields.hasErrors('reserv.timeReserv')}" th:errors="*{reserv.timeReserv}">Email Error</div>
-            </div>
-            <br/>
-            <div class="f">
-                <label for="countPeople">Введите кол-во людей: </label>
-                <input class="f" type="number" th:field="*{reserv.countPeople}" id="countPeople"/>
-                <div style="color:red" th:if="${#fields.hasErrors('reserv.countPeople')}" th:errors="*{reserv.countPeople}">Email Error</div>
-            </div>
-
-            <br/>
-            <input type="submit" value="Забронировать"/>
-        </form>
-    </div>
+            <textarea class="f" th:field="*{product.description}" id="description" maxlength="255"></textarea>
+            <div style="color:red" th:if="${#fields.hasErrors('product.description')}" th:errors="*{product.description}">Age Error</div>
+        </div>
+        <br>
+        <div class="f">
+            <label for="price">Стоимость</label>
+            <input type="number" th:field="*{product.price}" id="price" />
+            <div style="color:red" th:if="${#fields.hasErrors('product.price')}" th:errors="*{product.price}">Name Error</div>
+        </div>
+        <br>
+        <input type="submit" value="Сохранить"/>
+    </form>
 </div>
 </body>
 </html>

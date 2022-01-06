@@ -24,37 +24,16 @@
         </div>
     </div>
 </nav>
-<div style="position: absolute; left: 50%; transform:translate(-50%, 0)">
-    <div style="position: absolute; left: 50%; transform:translate(-50%, 0)">
-        <form th:method="POST" th:action="@{/admin/reserv/update/{id}(id=${reservId})}">
+<div class="align-middle" style="top:10%; position: absolute; left: 50%; transform:translate(-50%, 0)">
+        <form th:method="POST" th:action="@{/director/dogovor/update/{id}(id=${dogovor.getId()})}">
             <div class="f">
-                <label for="fullName">Введите ФИО: </label>
-                <input type="text" th:field="*{reserv.fullName}" id="fullName" />
-                <div style="color:red" th:if="${#fields.hasErrors('reserv.fullName')}" th:errors="*{reserv.fullName}">Name Error</div>
+                <label for="title">Наименование </label>
+                <input type="text" th:field="*{dogovor.title}" id="title" />
+                <div style="color:red" th:if="${#fields.hasErrors('dogovor.title')}" th:errors="*{dogovor.title}">Name Error</div>
             </div>
-            <br/>
-            <div class="f">
-                <label for="dateReserv">Введите дату брони: </label>
-                <input class="f" type="text" th:field="*{reserv.dateReserv}" id="dateReserv"/>
-                <div style="color:red" th:if="${#fields.hasErrors('reserv.dateReserv')}" th:errors="*{reserv.dateReserv}">Age Error</div>
-            </div>
-            <br/>
-            <div class="f">
-                <label for="timeReserv">Введите время брони: </label>
-                <input class="f" type="time" th:field="*{reserv.timeReserv}" id="timeReserv"/>
-                <div style="color:red" th:if="${#fields.hasErrors('reserv.timeReserv')}" th:errors="*{reserv.timeReserv}">Email Error</div>
-            </div>
-            <br/>
-            <div class="f">
-                <label for="countPeople">Введите кол-во людей: </label>
-                <input class="f" type="text" th:field="*{reserv.countPeople}" id="countPeople"/>
-                <div style="color:red" th:if="${#fields.hasErrors('reserv.countPeople')}" th:errors="*{reserv.countPeople}">Email Error</div>
-            </div>
-    
             <br/>
             <input type="submit" value="Сохранить"/>
         </form>
-    </div>
 </div>
 </body>
 </html>
