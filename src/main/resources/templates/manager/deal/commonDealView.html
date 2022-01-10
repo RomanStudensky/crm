@@ -2,10 +2,15 @@
 <html xmlns:th="http://www.thymeleaf.org" class="h-100" lang="ru">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
     <title>Панель управления администратора</title>
-    <style type="text/css">
+    <style>
+        a.disabled {
+            pointer-events: none; /* делаем элемент неактивным для взаимодействия */
+            cursor: default; /*  курсор в виде стрелки */
+            color: #888;/* цвет текста серый */
+        }
         a {
             text-decoration: none;
             color: #282828;
@@ -15,111 +20,54 @@
             color: #282828;
         }
         table {
-            border: 1px solid #282828;
-            font-family: "Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol", Sans-Serif;
             font-size: 14px;
-            background: #ffffff;
-            max-width: 70%;
-            width: 70%;
-            border-collapse: collapse;
-            text-align: left;
-            position: relative;
-            left: 50%;
-            transform:translate(-50%, 0)
-        }
-        th {
-            font-weight: normal;
-            color: #282828;
-            border-bottom: 2px solid #6678b1;
-            padding: 10px 8px;
             text-align: center;
+            width: 75%;
         }
         th a {
             display: block;
         }
         ._btn-active-table {
-            border: 2px solid #6678b1;
+            border: 1px solid inherit;
         }
         ._btn-active-table:hover {
-            -webkit-box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2) inset;
-            -moz-box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2) inset;
-            box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2) inset;
+            -webkit-box-shadow: 0 5px 10px 2px rgba(34, 60, 80, 0.2) inset;
+            -moz-box-shadow: 0 5px 10px 2px rgba(34, 60, 80, 0.2) inset;
+            box-shadow: 0 5px 10px 2px rgba(34, 60, 80, 0.2) inset;
         }
-        td {
-            color: #282828;
-            padding: 9px 8px;
-            transition: .3s linear;
-        }
-        .scroll-table-body {
-            max-height: 200px;
-            overflow-x: auto;
-            margin-top: 0px;
-            margin-bottom: 20px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .scroll-table table {
-            width:100%;
-            table-layout: fixed;
-            border: none;
-        }
-
-        .scroll-table thead th {
-            font-weight: bold;
-            text-align: center;
-            border: none;
-            padding: 10px 15px;
-            background: #d8d8d8;
-            font-size: 14px;
-            border-left: 1px solid #ddd;
-            border-right: 1px solid #ddd;
-        }
-        .scroll-table tbody td {
-            text-align: left;
-            border-left: 1px solid #ddd;
-            border-right: 1px solid #ddd;
-            padding: 10px 15px;
-            font-size: 14px;
-            vertical-align: top;
-        }
-        .scroll-table tbody tr:nth-child(even){
-            background: #f3f3f3;
-        }
-        /* Стили для скролла */
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-        }
-        ::-webkit-scrollbar-thumb {
-            box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-        }
-
     </style>
 </head>
-<body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">Ресторан - Администратор</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Панель управления">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="mx-auto">
-        <div class="collapse navbar-collapse" style="width: 100%;" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item active">
-                    <a class="nav-link" th:href="@{/admin/commonAdminViev}">Стол-Бронь<span class="sr-only"></span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" href="#">Выход</a>
-                </li>
-            </ul>
+<body style="font-family: 'Nunito Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif">
+    <nav class="navbar navbar-expand-sm navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand">CRM</a>
+            <!-- Left -->
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/manager/contact}">Заявки</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/manager/lead}">Активности</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" th:href="@{/manager/deal}">Сделки</a>
+                    </li>
+                </ul>
+                <!-- Right -->
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link">Менеджер</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/}">Выйти</a>
+                    </li>
+                </ul>
+            </div>
         </div>
-    </div>
-</nav>
-
-<div class="scroll-table">
-    <table>
+    </nav>
+    <br>
+    <table class="table table-striped table-hover w-75 position-relative translate-middle-x start-50">
         <thead>
         <tr>
             <th>№ лида</th>
@@ -128,48 +76,43 @@
             <th></th>
         </tr>
         </thead>
-        <div class="scroll-table-body">
-            <tbody>
-            <tr th:each="lead : ${leadList}">
-                <div th:if="${lead.getId() == leadId}">
-                    <th style="background-color: #efefef" th:text="${lead.getId()}"></th>
-                    <th style="background-color: #efefef" th:text="${lead.getTitle()}"></th>
-                    <th style="background-color: #efefef" th:text="${lead.getState().getLabel()}"></th>
-                    <th class="_btn-active-table"><a th:href="@{/manager/deal/{id}(id=${lead.getId()})}">Сделки</a></th>
-                </div>
-                <div th:unless="${lead.getId == leadId}">
-                    <th th:text="${lead.getId()}"></th>
-                    <th th:text="${lead.getTitle()}"></th>
-                    <th th:text="${lead.getState().getLabel()}"></th>
-                    <th class="_btn-active-table"><a th:href="@{/manager/deal/{id}(id=${lead.getId()})}">Сделки</a></th>
-                </div>
-            </tr>
-            </tbody>
-        </div>
+        <tbody>
+        <tr th:each="lead : ${leadList}">
+            <div th:if="${lead.getId() == leadId}">
+                <th class="table-active" th:text="${lead.getId()}"></th>
+                <th class="table-active" th:text="${lead.getTitle()}"></th>
+                <th class="table-active" th:text="${lead.getState().getLabel()}"></th>
+                <th class="_btn-active-table"><a th:href="@{/manager/deal/{id}(id=${lead.getId()})}">Сделки</a></th>
+            </div>
+            <div th:unless="${lead.getId == leadId}">
+                <th th:text="${lead.getId()}"></th>
+                <th th:text="${lead.getTitle()}"></th>
+                <th th:text="${lead.getState().getLabel()}"></th>
+                <th class="_btn-active-table"><a th:href="@{/manager/deal/{id}(id=${lead.getId()})}">Сделки</a></th>
+            </div>
+        </tr>
+        </tbody>
     </table>
-</div>
-
-<div class="scroll-table">
-    <table>
+    <br>
+    <table class="table table-striped table-hover w-75 position-relative translate-middle-x start-50">
         <thead>
         <tr>
             <th>№ сделки</th>
             <th>Заголовок</th>
             <th>Состояние</th>
             <th>Договор</th>
-            <th class="_btn-active-table" colspan="3" style="text-align: center;"><a th:href="@{/manager/deal/create/view/{id}(id=${leadId})}">Добавить</a></th>
+            <th class="_btn-active-table" colspan="3" style="text-align: center;"><a th:class="${leadId == null ? 'disabled' : ''}" th:href="@{/manager/deal/create/view/{id}(id=${leadId})}">Добавить</a></th>
         </tr>
         </thead>
-        <div class="scroll-table-body">
-            <tbody>
+        <tbody>
             <tr th:each="deal : ${dealList}">
                 <div th:if="${deal.getId() == dealId}">
-                    <th style="background-color: #efefef" th:text="${deal.getId()}"></th>
-                    <th style="background-color: #efefef" th:text="${deal.getTitle()}"></th>
-                    <th style="background-color: #efefef" th:text="${deal.getState().getLabel()}"></th>
-                    <th style="background-color: #efefef" th:text="${deal.getDogovor().getTitle()}"></th>
-                    <th style="background-color: #efefef" class="_btn-active-table"><a th:href="@{/manager/deal/{idLead}/{idDeal}(idLead=${leadId}, idDeal=${deal.getId()})}">Товар</a></th>
-                    <th style="background-color: #efefef" class="_btn-active-table"><a th:disabled="${deal.getState() == deal.getState().CLOSE}" th:href="@{/manager/deal/update/view/{id}(id=${deal.getId()})}">Редактировать</a></th>
+                    <th class="table-active" th:text="${deal.getId()}"></th>
+                    <th class="table-active" th:text="${deal.getTitle()}"></th>
+                    <th class="table-active" th:text="${deal.getState().getLabel()}"></th>
+                    <th class="table-active" th:text="${deal.getDogovor().getTitle()}"></th>
+                    <th class="table-active"><a th:href="@{/manager/deal/{idLead}/{idDeal}(idLead=${leadId}, idDeal=${deal.getId()})}">Товар</a></th>
+                    <th class="table-active"><a th:disabled="${deal.getState() == deal.getState().CLOSE}" th:href="@{/manager/deal/update/view/{id}(id=${deal.getId()})}">Редактировать</a></th>
                     <th th:if="${deal.getState() == deal.getState().OPEN}" class="_btn-active-table"><form th:method="POST" th:action="@{/manager/deal/approve/{leadId}/{dealId}/(leadId=${leadId}, dealId=${deal.getId()})}"><input style="size: auto; background: none; border: none; outline: none;" type="submit" value="Утвердить"></form></th>
                     <th th:if="${deal.getState() == deal.getState().APPROVE}" class="_btn-active-table"><form th:method="POST" th:action="@{/manager/deal/close/{leadId}/{dealId}/(leadId=${leadId}, dealId=${deal.getId()})}"><input style="size: auto; background: none; border: none; outline: none;" type="submit" value="Закрыть"></form></th>
                 </div>
@@ -178,38 +121,32 @@
                     <th th:text="${deal.getTitle()}"></th>
                     <th th:text="${deal.getState().getLabel()}"></th>
                     <th th:text="${deal.getDogovor().getTitle()}"></th>
-                    <th class="_btn-active-table"><a th:href="@{/manager/deal/{idLead}/{idDeal}(idLead=${leadId}, idDeal=${deal.getId()})}">Товар</a></th>
-                    <th class="_btn-active-table"><a th:disabled="${deal.getState() == deal.getState().CLOSE}" th:href="@{/manager/deal/update/view/{id}(id=${deal.getId()})}">Редактировать</a></th>
+                    <th ><a th:href="@{/manager/deal/{idLead}/{idDeal}(idLead=${leadId}, idDeal=${deal.getId()})}">Товар</a></th>
+                    <th ><a th:disabled="${deal.getState() == deal.getState().CLOSE}" th:href="@{/manager/deal/update/view/{id}(id=${deal.getId()})}">Редактировать</a></th>
                     <th th:if="${deal.getState() == deal.getState().OPEN}" class="_btn-active-table"><form th:method="POST" th:action="@{/manager/deal/approve/{leadId}/{dealId}/(leadId=${leadId}, dealId=${deal.getId()})}"><input style="size: auto; background: none; border: none; outline: none;" type="submit" value="Утвердить"></form></th>
                     <th th:if="${deal.getState() == deal.getState().APPROVE}" class="_btn-active-table"><form th:method="POST" th:action="@{/manager/deal/close/{leadId}/{dealId}/(leadId=${leadId}, dealId=${deal.getId()})}"><input style="size: auto; background: none; border: none; outline: none;" type="submit" value="Закрыть"></form></th>
                 </div>
             </tr>
-            </tbody>
-        </div>
+        </tbody>
     </table>
-</div>
-
-<div class="scroll-table">
-    <table>
+    <br>
+    <table class="table table-striped table-hover w-75 position-relative translate-middle-x start-50">
         <thead>
         <tr>
             <th>№ состава</th>
             <th>Товар</th>
             <th>Количество</th>
-            <th class="_btn-active-table" colspan="1" style="text-align: center;"><a th:href="@{/manager/deal/create/sostav/view/{id}(id=${dealId})}">Добавить</a></th>
+            <th class="_btn-active-table" colspan="1" style="text-align: center;"><a th:class="${dealId == null ? 'disabled' : ''}" th:href="@{/manager/deal/create/sostav/view/{id}(id=${dealId})}">Добавить</a></th>
         </tr>
         </thead>
-        <div class="scroll-table-body">
-            <tbody>
+        <tbody>
             <tr th:each="sostav : ${sostavList}">
                 <th th:text="${sostav.getId()}"></th>
                 <th th:text="${sostav.getProduct().getName()}"></th>
                 <th th:text="${sostav.getCount()}"></th>
                 <th class="_btn-active-table"><a th:href="@{/manager/deal/sostav/update/view/{id}(id=${sostav.getId()})}">Редактировать</a></th>
             </tr>
-            </tbody>
-        </div>
+        </tbody>
     </table>
-</div>
 </body>
 </html>
