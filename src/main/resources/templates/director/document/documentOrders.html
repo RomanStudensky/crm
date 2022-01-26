@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" class="h-100">
+<head>
+    <meta charset="UTF-8">
+    <title>Изменение даты отпуска</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+    <nav class="navbar navbar-expand-sm navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand">CRM</a>
+
+            <!-- Left -->
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/director/dogovor}">Договоры</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/director/manager}">Менеджеры</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/director/product}">Продукты</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/director/document/activity}">Отчёт об активностях</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/director/document/deal}">Отчёт о сделках</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/director/document/manager}">Отчёт о менеджерах</a>
+                    </li>
+                </ul>
+                <!-- Right -->
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link">Менеджер</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/}">Выйти</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div style="position: absolute; left: 50%; transform:translate(-50%, 0)">
+        <div style="position: absolute; left: 50%; transform:translate(-50%, 0)">
+            <form th:method="POST" th:action="@{/director/documents/spis}">
+
+                <div class="f">
+                    <label class="form-label" for="birthday">Укажите временной промежуток для составления отчёта от: </label>
+                    <input class="form-control" type="date" th:field="*{dateWrap.beginDate}" id="birthday" />
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('contact.birthday')}" th:errors="*{contact.birthday}">Name Error</div>
+                </div>
+
+                <div class="f">
+                    <label class="form-label" for="birthday">до: </label>
+                    <input class="form-control" type="date" th:field="*{dateWrap.endDate}" id="birthday" />
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('contact.birthday')}" th:errors="*{contact.birthday}">Name Error</div>
+                </div>
+
+                <input type="submit" value="Сформировать отчёт">
+            </form>
+        </div>
+    </div>
+</body>
+</html>

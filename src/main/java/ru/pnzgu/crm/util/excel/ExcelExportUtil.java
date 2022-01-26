@@ -6,6 +6,7 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.RegionUtil;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import ru.pnzgu.crm.dto.OrderDto;
 import ru.pnzgu.restauran.dto.*;
 import ru.pnzgu.restauran.util.excel.enums.SostavPostavCol;
 import ru.pnzgu.restauran.util.excel.enums.SostavProdCol;
@@ -23,7 +24,7 @@ public class ExcelExportUtil {
 
     private final static DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DateOptions.PATTERN);
 
-    public static ByteArrayOutputStream createPostavExelDocument(PostavshikDTO postavshikDTO, List<NakladDTO> nakladList) throws IOException {
+    public static ByteArrayOutputStream createPostavExelDocument(List<OrderDto> orderList) throws IOException {
 
         XSSFWorkbook workbook = new XSSFWorkbook();
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
