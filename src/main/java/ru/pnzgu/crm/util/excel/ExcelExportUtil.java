@@ -6,12 +6,11 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.RegionUtil;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import ru.pnzgu.crm.dto.ActivityDto;
+import ru.pnzgu.crm.dto.DateWrapperDto;
 import ru.pnzgu.crm.dto.OrderDto;
-import ru.pnzgu.restauran.dto.*;
-import ru.pnzgu.restauran.util.excel.enums.SostavPostavCol;
-import ru.pnzgu.restauran.util.excel.enums.SostavProdCol;
-import ru.pnzgu.restauran.util.excel.enums.SpistProdCol;
-import ru.pnzgu.restauran.util.mapping.DateOptions;
+import ru.pnzgu.crm.util.excel.enums.OrdersCol;
+import ru.pnzgu.crm.util.mapping.DateOptions;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -24,48 +23,34 @@ public class ExcelExportUtil {
 
     private final static DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DateOptions.PATTERN);
 
-    public static ByteArrayOutputStream createPostavExelDocument(List<OrderDto> orderList) throws IOException {
+    public static ByteArrayOutputStream createOrdersExelDocument(List<OrderDto> orderList) throws IOException {
 
         XSSFWorkbook workbook = new XSSFWorkbook();
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         XSSFCellStyle cellStyle = workbook.createCellStyle();
 
-        createDocumentPostav(postavshikDTO, nakladList, workbook, cellStyle);
+        createDocumentOrders(orderList, workbook, cellStyle);
 
         workbook.write(outputStream);
         outputStream.close();
         return outputStream;
     }
 
-    public static ByteArrayOutputStream createSpisCurrentDateExelDocument(List<AktDTO> aktList) throws IOException {
+    public static ByteArrayOutputStream createManagerExelDocument(List<ActivityDto> activityList) throws IOException {
 
         XSSFWorkbook workbook = new XSSFWorkbook();
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         XSSFCellStyle cellStyle = workbook.createCellStyle();
 
-        createDocumentSpis(aktList, workbook, cellStyle);
+        createDocumentManager(activityList, workbook, cellStyle);
 
         workbook.write(outputStream);
         outputStream.close();
         return outputStream;
     }
 
-    // TODO нужен SQL запрос
-    public static ByteArrayOutputStream createProdazaExelDocument(ProdazaDTO prodazaDTO, List<SostavProdDTO> sostavProdList) throws IOException {
-
-        XSSFWorkbook workbook = new XSSFWorkbook();
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        XSSFCellStyle cellStyle = workbook.createCellStyle();
-
-        createDocumentProd(prodazaDTO, sostavProdList, workbook, cellStyle);
-
-        workbook.write(outputStream);
-        outputStream.close();
-        return outputStream;
-    }
-
-    private static void createDocumentPostav(PostavshikDTO postavshikDTO, List<NakladDTO> nakladList, XSSFWorkbook workbook, XSSFCellStyle cellStyle) {
-        Sheet sheet = workbook.createSheet(String.format("Отчёт по поставкам продуктов от поставщика: %s", postavshikDTO.getNamePost()));
+    private static void createDocumentOrders(List<OrderDto> orderList, DateWrapperDto dateWrapperDto, XSSFWorkbook workbook, XSSFCellStyle cellStyle) {
+        Sheet sheet = workbook.createSheet("Отчёт по заявкам");
         sheet.autoSizeColumn(1);
 
         int rowNum = 0;
@@ -73,26 +58,15 @@ public class ExcelExportUtil {
         Row row = sheet.createRow(rowNum);
         row.setHeightInPoints(30.0f);
 
-        sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, SostavPostavCol.LENGTH - 1));
-        setMergedCellBorders(new CellRangeAddress(0, 0, 0, SostavPostavCol.LENGTH - 1), sheet);
+        sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, OrdersCol.LENGTH - 1));
+        setMergedCellBorders(new CellRangeAddress(0, 0, 0, OrdersCol.LENGTH - 1), sheet);
 
-        createCell(cellStyle, row, sheet, 0, String.format("Отчёт по поставкам продуктов от поставщика: %s", postavshikDTO.getNamePost()));
+        createCell(cellStyle, row, sheet, 0,
+                String.format("Отчёт по заявкам. Дата от %s до %s",
+                dateWrapperDto.getBeginDate().format(formatter),
+                dateWrapperDto.getEndDate().format(formatter)));
 
-        for (NakladDTO nakladDTO : nakladList) {
-            if (nakladDTO.getSostav().isEmpty()) {
-                continue;
-            }
-
-            rowNum+=2;
-            row = sheet.createRow(rowNum);
-            row.setHeightInPoints(30.0f);
-
-            sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum, 0, SostavPostavCol.LENGTH - 1));
-            setMergedCellBorders(new CellRangeAddress(rowNum, rowNum, 0, SostavPostavCol.LENGTH - 1), sheet);
-
-            createCell(cellStyle, row, sheet, 0, String.format("Товарная накладная: №%s от %s", nakladDTO.getId(), nakladDTO.getDateNaklad()));
-
-            // Шапка
+             // Шапка
             rowNum++;
             row = sheet.createRow(rowNum);
             row.setHeightInPoints(25.0f);
@@ -123,17 +97,12 @@ public class ExcelExportUtil {
             sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum, 0, SostavPostavCol.LENGTH - 2));
             setMergedCellBorders(new CellRangeAddress(rowNum, rowNum, 0, SostavPostavCol.LENGTH - 2), sheet);
 
-            createCell(cellStyle, row, sheet, 0, "Итого:");
-            createCell(cellStyle, row, sheet, SostavPostavCol.LENGTH - 1, String.valueOf(summ));
-
-
-
-            rowNum++;
-        }
+            createCell(cellStyle, row, sheet, 0, "Кол-во:");
+            createCell(cellStyle, row, sheet, C.LENGTH - 1, String.valueOf(summ));
 
     }
 
-    private static void createDocumentSpis(List<AktDTO> sostavAktList, XSSFWorkbook workbook, XSSFCellStyle cellStyle) {
+    private static void createDocumentManager(List<ActivityDto> activityList, XSSFWorkbook workbook, XSSFCellStyle cellStyle) {
         Sheet sheet = workbook.createSheet("Отчёт по списанным продуктам");
         sheet.autoSizeColumn(1);
 

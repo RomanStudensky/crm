@@ -5,11 +5,11 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public enum SostavPostavCol {
+public enum ManagerCol {
     COLUMN_NUMBER (0, "№"),
-    COLUMN_PROD_NAME(1, "Название продукта"),
+    COLUMN_DRINK_NAME(1, "Название напитка"),
     COLUMN_QUANTITY(2, "Количество"),
-    COLUMN_PRICE(3, "Цена"),
+    COLUMN_PRICE(3, "Стоимость за единицу"),
     COLUMN_SUMMA(4, "Сумма");
 
     private int colNum;
