@@ -6,43 +6,76 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.RegionUtil;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import ru.pnzgu.crm.dto.ActivityDto;
-import ru.pnzgu.crm.dto.DateWrapperDto;
-import ru.pnzgu.crm.dto.OrderDto;
+import org.springframework.lang.NonNull;
+import ru.pnzgu.crm.dto.*;
+import ru.pnzgu.crm.util.excel.enums.ActivityCol;
+import ru.pnzgu.crm.util.excel.enums.DealCol;
 import ru.pnzgu.crm.util.excel.enums.OrdersCol;
-import ru.pnzgu.crm.util.mapping.DateOptions;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
+
+import static ru.pnzgu.crm.util.mapping.DateOptions.formatter;
 
 @UtilityClass
 public class ExcelExportUtil {
 
-    private final static DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DateOptions.PATTERN);
-
-    public static ByteArrayOutputStream createOrdersExelDocument(List<OrderDto> orderList) throws IOException {
+    /**
+     * Create and get excel document with orders.
+     *
+     * @param orderList order list
+     * @param dateWrapper date begin, date end wrapper
+     * @return excel document with orders
+     */
+    public static ByteArrayOutputStream createAndGetOrdersExelDocument(@NonNull List<OrderDto> orderList, @NonNull DateWrapperDto dateWrapper) throws IOException {
 
         XSSFWorkbook workbook = new XSSFWorkbook();
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         XSSFCellStyle cellStyle = workbook.createCellStyle();
 
-        createDocumentOrders(orderList, workbook, cellStyle);
+        createDocumentOrders(orderList, dateWrapper, workbook, cellStyle);
 
         workbook.write(outputStream);
         outputStream.close();
         return outputStream;
     }
 
-    public static ByteArrayOutputStream createManagerExelDocument(List<ActivityDto> activityList) throws IOException {
+    /**
+     * Create and get excel document with activity by manager.
+     *
+     * @param manager manager
+     * @param activityList activity list
+     * @return excel document with orders by manager
+     */
+    public static ByteArrayOutputStream createAndGetManagerExelDocument(@NonNull ManagerDto manager, @NonNull List<ActivityDto> activityList) throws IOException {
 
         XSSFWorkbook workbook = new XSSFWorkbook();
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         XSSFCellStyle cellStyle = workbook.createCellStyle();
 
-        createDocumentManager(activityList, workbook, cellStyle);
+        createDocumentManager(manager, activityList, workbook, cellStyle);
+
+        workbook.write(outputStream);
+        outputStream.close();
+        return outputStream;
+    }
+
+    /**
+     * Create and get excel document with deals between dates.
+     *
+     * @param dateWrapper dateWrapper
+     * @param dealList deal list
+     * @return excel document with deals by manager
+     */
+    public static ByteArrayOutputStream createAndGetDealExelDocument(@NonNull List<DealDto> dealList, @NonNull DateWrapperDto dateWrapper) throws IOException {
+
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        XSSFCellStyle cellStyle = workbook.createCellStyle();
+
+        createDocumentDeal(dateWrapper, dealList, workbook, cellStyle);
 
         workbook.write(outputStream);
         outputStream.close();
@@ -50,7 +83,12 @@ public class ExcelExportUtil {
     }
 
     private static void createDocumentOrders(List<OrderDto> orderList, DateWrapperDto dateWrapperDto, XSSFWorkbook workbook, XSSFCellStyle cellStyle) {
-        Sheet sheet = workbook.createSheet("Отчёт по заявкам");
+        Sheet sheet = workbook.createSheet(
+                String.format("Отчёт по заявкам с %s по %s",
+                        dateWrapperDto.getBeginDate().format(formatter),
+                        dateWrapperDto.getEndDate().format(formatter))
+        );
+
         sheet.autoSizeColumn(1);
 
         int rowNum = 0;
@@ -66,44 +104,40 @@ public class ExcelExportUtil {
                 dateWrapperDto.getBeginDate().format(formatter),
                 dateWrapperDto.getEndDate().format(formatter)));
 
-             // Шапка
+        // Шапка
+        rowNum++;
+        row = sheet.createRow(rowNum);
+        row.setHeightInPoints(25.0f);
+        for (int colNum = 0; colNum < OrdersCol.LENGTH; colNum++) {
+            createCell(cellStyle, row, sheet, OrdersCol.values()[colNum].getColNum(), OrdersCol.values()[colNum].getColName());
+        }
+
+        // Тело
+        for (OrderDto order : orderList) {
             rowNum++;
             row = sheet.createRow(rowNum);
-            row.setHeightInPoints(25.0f);
-            for (int colNum = 0; colNum < SostavPostavCol.LENGTH; colNum++) {
-                createCell(cellStyle, row, sheet, SostavPostavCol.values()[colNum].getColNum(), SostavPostavCol.values()[colNum].getColName());
-            }
-            // Тело
-            for (SostavPostavDTO sostavPostavDTO : nakladDTO.getSostav()) {
-                rowNum++;
-                row = sheet.createRow(rowNum);
-                row.setHeightInPoints(18.0f);
-                createCell(cellStyle, row, sheet, SostavPostavCol.COLUMN_NUMBER.getColNum(), String.valueOf(sostavPostavDTO.getId()));
-                createCell(cellStyle, row, sheet, SostavPostavCol.COLUMN_PROD_NAME.getColNum(), sostavPostavDTO.getProduct().getNameProd());
-                createCell(cellStyle, row, sheet, SostavPostavCol.COLUMN_QUANTITY.getColNum(), String.valueOf(sostavPostavDTO.getQuantity()));
-                createCell(cellStyle, row, sheet, SostavPostavCol.COLUMN_PRICE.getColNum(), String.valueOf(sostavPostavDTO.getPrice()));
-                createCell(cellStyle, row, sheet, SostavPostavCol.COLUMN_SUMMA.getColNum(), String.valueOf(sostavPostavDTO.getSumma()));
-            }
-            Long summ = nakladDTO
-                    .getSostav()
-                    .stream()
-                    .map(SostavPostavDTO::getSumma)
-                    .reduce(0L, Long::sum);
+            row.setHeightInPoints(18.0f);
+            createCell(cellStyle, row, sheet, OrdersCol.COLUMN_NUMBER.getColNum(), String.valueOf(order.getId()));
+            createCell(cellStyle, row, sheet, OrdersCol.COLUMN_DATE.getColNum(), order.getDate().format(formatter));
+            createCell(cellStyle, row, sheet, OrdersCol.COLUMN_FULL_NAME.getColNum(), order.getContact().getFullName());
+            createCell(cellStyle, row, sheet, OrdersCol.COLUMN_ORIGIN.getColNum(), String.valueOf(order.getOrigin()));
+        }
 
-            rowNum++;
-            row = sheet.createRow(rowNum);
-            row.setHeightInPoints(25.0f);
+        int count = orderList.size();
 
-            sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum, 0, SostavPostavCol.LENGTH - 2));
-            setMergedCellBorders(new CellRangeAddress(rowNum, rowNum, 0, SostavPostavCol.LENGTH - 2), sheet);
+        rowNum++;
+        row = sheet.createRow(rowNum);
+        row.setHeightInPoints(25.0f);
 
-            createCell(cellStyle, row, sheet, 0, "Кол-во:");
-            createCell(cellStyle, row, sheet, C.LENGTH - 1, String.valueOf(summ));
+        sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum, 0, OrdersCol.LENGTH - 2));
+        setMergedCellBorders(new CellRangeAddress(rowNum, rowNum, 0, OrdersCol.LENGTH - 2), sheet);
 
+        createCell(cellStyle, row, sheet, 0, "Кол-во:");
+        createCell(cellStyle, row, sheet, OrdersCol.LENGTH - 1, String.valueOf(count));
     }
 
-    private static void createDocumentManager(List<ActivityDto> activityList, XSSFWorkbook workbook, XSSFCellStyle cellStyle) {
-        Sheet sheet = workbook.createSheet("Отчёт по списанным продуктам");
+    private static void createDocumentManager(ManagerDto manager, List<ActivityDto> activityList, XSSFWorkbook workbook, XSSFCellStyle cellStyle) {
+        Sheet sheet = workbook.createSheet(String.format("Отчёт по менеджеру %s", manager.getFullName()));
         sheet.autoSizeColumn(1);
 
         int rowNum = 0;
@@ -111,69 +145,56 @@ public class ExcelExportUtil {
         Row row = sheet.createRow(rowNum);
         row.setHeightInPoints(30.0f);
 
-        sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum, 0, SpistProdCol.LENGTH - 1));
-        setMergedCellBorders(new CellRangeAddress(rowNum, rowNum, 0, SpistProdCol.LENGTH - 1), sheet);
+        sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum, 0, ActivityCol.LENGTH - 1));
+        setMergedCellBorders(new CellRangeAddress(rowNum, rowNum, 0, ActivityCol.LENGTH - 1), sheet);
 
-        createCell(cellStyle, row, sheet, 0, "Отчёт о списанных продуктах");
+        createCell(cellStyle, row, sheet, 0, String.format("Отчёт по менеджеру %s", manager.getFullName()));
 
         rowNum++;
         row = sheet.createRow(rowNum);
         row.setHeightInPoints(30.0f);
 
-        sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum, 0, SpistProdCol.LENGTH - 1));
-        setMergedCellBorders(new CellRangeAddress(rowNum, rowNum, 0, SpistProdCol.LENGTH - 1), sheet);
+        sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum, 0, ActivityCol.LENGTH - 1));
+        setMergedCellBorders(new CellRangeAddress(rowNum, rowNum, 0, ActivityCol.LENGTH - 1), sheet);
 
-        createCell(cellStyle, row, sheet, 0, String.format("Дата формирования отчёта: %s", LocalDate.now()));
+        createCell(cellStyle, row, sheet, 0, String.format("Дата формирования отчёта: %s", LocalDate.now().format(formatter)));
 
         // Шапка
         rowNum++;
         row = sheet.createRow(rowNum);
         row.setHeightInPoints(25.0f);
-        for (int colNum = 0; colNum < SpistProdCol.LENGTH; colNum++) {
-            createCell(cellStyle, row, sheet, SpistProdCol.values()[colNum].getColNum(), SpistProdCol.values()[colNum].getColName());
+        for (int colNum = 0; colNum < ActivityCol.LENGTH; colNum++) {
+            createCell(cellStyle, row, sheet, ActivityCol.values()[colNum].getColNum(), ActivityCol.values()[colNum].getColName());
         }
 
-        for (AktDTO aktDTO : sostavAktList) {
-
-            if (aktDTO.getSpisProducts().isEmpty()) {
-                continue;
-            }
-
-            // Тело
-            for (SostavAktDTO sostavAktDTO : aktDTO.getSpisProducts()) {
-                rowNum++;
-                row = sheet.createRow(rowNum);
-                row.setHeightInPoints(18.0f);
-                createCell(cellStyle, row, sheet, SpistProdCol.COLUMN_NUMBER.getColNum(), String.valueOf(sostavAktDTO.getId()));
-                createCell(cellStyle, row, sheet, SpistProdCol.COLUMN_PROD_NAME.getColNum(), sostavAktDTO.getProduct().getNameProd());
-                createCell(cellStyle, row, sheet, SpistProdCol.COLUMN_QUANTITY.getColNum(), String.valueOf(sostavAktDTO.getQuantity()));
-                createCell(cellStyle, row, sheet, SpistProdCol.COLUMN_REASON.getColNum(), String.valueOf(sostavAktDTO.getReason()));
-                createCell(cellStyle, row, sheet, SpistProdCol.COLUMN_DATE.getColNum(), String.valueOf(aktDTO.getDateAkt()));
-                createCell(cellStyle, row, sheet, SpistProdCol.COLUMN_SUMMA.getColNum(), String.valueOf(sostavAktDTO.getSumma()));
-            }
+        // Тело
+        for (ActivityDto activity : activityList) {
+            rowNum++;
+            row = sheet.createRow(rowNum);
+            row.setHeightInPoints(18.0f);
+            createCell(cellStyle, row, sheet, ActivityCol.COLUMN_NUMBER.getColNum(), String.valueOf(activity.getId()));
+            createCell(cellStyle, row, sheet, ActivityCol.COLUMN_TITLE.getColNum(), activity.getTitle());
+            createCell(cellStyle, row, sheet, ActivityCol.COLUMN_DATE_BEGIN.getColNum(), String.valueOf(activity.getDateBegin()));
+            createCell(cellStyle, row, sheet, ActivityCol.COLUMN_DATE_END.getColNum(), activity.getDateEnd() == null ? "" : activity.getDateEnd().format(formatter));
+            createCell(cellStyle, row, sheet, ActivityCol.COLUMN_DEAL.getColNum(), activity.getDeal() == null ? "" : String.format("(№ %s) %s", activity.getId(), activity.getDeal().getTitle()));
         }
+
         rowNum++;
-        Double summ = sostavAktList
-                .stream()
-                .map(akt -> akt
-                        .getSpisProducts()
-                        .stream()
-                        .map(SostavAktDTO::getSumma)
-                        .reduce(0.0D, Double::sum))
-                .reduce(0.0D, Double::sum);
+        int count = activityList.size();
 
         row = sheet.createRow(rowNum);
         row.setHeightInPoints(25.0f);
 
-        sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum, 0, SpistProdCol.LENGTH - 2));
-        setMergedCellBorders(new CellRangeAddress(rowNum, rowNum, 0, SpistProdCol.LENGTH - 2), sheet);
+        sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum, 0, ActivityCol.LENGTH - 2));
+        setMergedCellBorders(new CellRangeAddress(rowNum, rowNum, 0, ActivityCol.LENGTH - 2), sheet);
 
-        createCell(cellStyle, row, sheet, 0, "Итого:");
-        createCell(cellStyle, row, sheet, SpistProdCol.LENGTH - 1, String.valueOf(summ));
+
+        createCell(cellStyle, row, sheet, 0, "Кол-во:");
+        createCell(cellStyle, row, sheet, ActivityCol.LENGTH - 1, String.valueOf(count));
     }
 
-    private static void createDocumentProd(ProdazaDTO prodazaDTO, List<SostavProdDTO> sostavProdList, XSSFWorkbook order, XSSFCellStyle cellStyle) {
-        Sheet sheet = order.createSheet("Отчёт о продажах в баре");
+    private static void createDocumentDeal(DateWrapperDto dateWrapper, List<DealDto> daelList, XSSFWorkbook workbook, XSSFCellStyle cellStyle) {
+        Sheet sheet = workbook.createSheet("Отчёт по сделкам");
         sheet.autoSizeColumn(1);
 
         int rowNum = 0;
@@ -181,19 +202,41 @@ public class ExcelExportUtil {
         Row row = sheet.createRow(rowNum);
         row.setHeightInPoints(30.0f);
 
-        for (int colNum = 0; colNum < SostavProdCol.LENGTH; colNum++) {
-            createCell(cellStyle, row, sheet, SostavProdCol.values()[colNum].getColNum(), SostavProdCol.values()[colNum].getColName());
-        }
+        sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum, 0, DealCol.LENGTH - 1));
+        setMergedCellBorders(new CellRangeAddress(rowNum, rowNum, 0, DealCol.LENGTH - 1), sheet);
 
+        createCell(cellStyle, row, sheet, 0, String.format("Отчёт по сделкам от %s до %s", dateWrapper.getBeginDate(), dateWrapper.getEndDate()));
+
+        // Шапка
         rowNum++;
         row = sheet.createRow(rowNum);
-        row.setHeightInPoints(53.0f);
+        row.setHeightInPoints(25.0f);
+        for (int colNum = 0; colNum < DealCol.LENGTH; colNum++) {
+            createCell(cellStyle, row, sheet, DealCol.values()[colNum].getColNum(), DealCol.values()[colNum].getColName());
+        }
 
-        createCell(cellStyle, row, sheet, SostavProdCol.COLUMN_NUMBER.getColNum(), String.valueOf(prodazaDTO.getId()));
-        createCell(cellStyle, row, sheet, SostavProdCol.COLUMN_DRINK_NAME.getColNum(), prodazaDTO.getSotrud().getFio());
-        createCell(cellStyle, row, sheet, SostavProdCol.COLUMN_QUANTITY.getColNum(), prodazaDTO.getDateProd().toString());
-        createCell(cellStyle, row, sheet, SostavProdCol.COLUMN_PRICE.getColNum(), prodazaDTO.getTimeProd().toString());
-        createCell(cellStyle, row, sheet, SostavProdCol.COLUMN_SUMMA.getColNum(), prodazaDTO.getSotrud().getFio());
+        // Тело
+        for (DealDto deal : daelList) {
+            rowNum++;
+            row = sheet.createRow(rowNum);
+            row.setHeightInPoints(18.0f);
+            createCell(cellStyle, row, sheet, DealCol.COLUMN_NUMBER.getColNum(), String.valueOf(deal.getId()));
+            createCell(cellStyle, row, sheet, DealCol.COLUMN_TITLE.getColNum(), deal.getTitle());
+            createCell(cellStyle, row, sheet, DealCol.COLUMN_TITLE.getColNum(), deal.getDate().format(formatter));
+            createCell(
+                    cellStyle,
+                    row,
+                    sheet,
+                    DealCol.COLUMN_SUMMA.getColNum(),
+                    deal
+                            .getSostav()
+                            .stream()
+                            .map((a) -> a.getProduct().getPrice() * a.getCount())
+                            .reduce(Double::sum).toString()
+            );
+
+        }
+
     }
 
     private static void createCell(XSSFCellStyle cellStyle, Row row, Sheet sheet, int colNumber, String cellValue) {

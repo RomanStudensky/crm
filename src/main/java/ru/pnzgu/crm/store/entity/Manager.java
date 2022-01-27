@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -29,5 +31,6 @@ public class Manager extends ParentEntity {
     @Column(name = "phone", nullable = false)
     private String phone;
 
-
+    @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, mappedBy = "manager")
+    List<Activity> activities = new ArrayList<>();
 }

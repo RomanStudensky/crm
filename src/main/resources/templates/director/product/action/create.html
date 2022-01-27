@@ -44,9 +44,9 @@
             <input class="form-control" type="number" th:field="*{product.price}" id="price" />
             <div class="invalid-feedback" th:if="${#fields.hasErrors('product.price')}" th:errors="*{product.price}">Name Error</div>
         </div>
-        <br>
         <br/>
-            <input class="btn btn-primary" type="submit" value="Сохранить"/>
+        <br/>
+        <input class="btn btn-primary" type="submit" value="Сохранить"/>
     </form>
 </div>
 </body>

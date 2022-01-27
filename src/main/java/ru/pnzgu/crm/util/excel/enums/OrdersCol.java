@@ -7,9 +7,9 @@ import lombok.Getter;
 @Getter
 public enum OrdersCol {
     COLUMN_NUMBER (0, "Номер"),
-    COLUMN_PROD_NAME(1, "Дата"),
-    COLUMN_QUANTITY(2, "ФИО"),
-    COLUMN_PRICE(3, "Источник");
+    COLUMN_DATE(1, "Дата"),
+    COLUMN_FULL_NAME(2, "ФИО"),
+    COLUMN_ORIGIN(3, "Источник");
 
     private int colNum;
     private String colName;

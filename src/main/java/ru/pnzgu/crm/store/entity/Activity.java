@@ -27,8 +27,11 @@ public class Activity extends ParentEntity {
     @Column(name = "description", nullable = false)
     private String description;
 
-    @Column(name = "date", nullable = false)
-    private LocalDate date;
+    @Column(name = "date_begin", nullable = false)
+    private LocalDate dateBegin;
+
+    @Column(name = "date_end", nullable = false)
+    private LocalDate dateEnd;
 
     @Column(name = "time", nullable = false)
     private LocalTime time;
@@ -37,7 +40,7 @@ public class Activity extends ParentEntity {
     @Enumerated(EnumType.STRING)
     private ActivityState state;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_id_manager", nullable = false)
     private Manager manager;
 

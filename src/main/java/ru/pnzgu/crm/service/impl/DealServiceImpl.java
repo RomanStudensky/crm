@@ -139,7 +139,7 @@ public class DealServiceImpl implements DealService {
         Deal deal = getDealById(id);
 
         deal.setState(DealState.APPROVE);
-        dealRepository.saveAndFlush(deal);
+        dealRepository.save(deal);
     }
 
     @Transactional
@@ -148,7 +148,7 @@ public class DealServiceImpl implements DealService {
         Deal deal = getDealById(id);
 
         deal.setState(DealState.CLOSE);
-        dealRepository.saveAndFlush(deal);
+        dealRepository.save(deal);
     }
 
     private Deal getDealById(Long id) {

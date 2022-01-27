@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import ru.pnzgu.crm.store.entity.Deal;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,4 +21,6 @@ public interface DealRepository extends JpaRepository<Deal, Long> {
                     "join activity a " +
                     "on a.fk_id_deal = ?1 and l.id = a.fk_id_lead")
     Optional<Long> findLeadByDealId(Long dealId);
+
+    List<Deal> findByDateBetween(LocalDate begin, LocalDate end);
 }

@@ -7,6 +7,7 @@ import lombok.Setter;
 import ru.pnzgu.crm.store.states.DealState;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,5 +20,6 @@ public class DealDto extends ParentDto implements Serializable {
     private List<ProductDto> products = new ArrayList<>();
     private DogovorDto dogovor;
     private DealState state;
+    private LocalDate date;
     private List<DealSostavDto> sostav = new ArrayList<>();
 }

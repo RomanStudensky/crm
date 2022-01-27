@@ -24,7 +24,10 @@ public class ActivityDto extends ParentDto implements Serializable {
     private String description;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DateOptions.PATTERN)
-    private LocalDate date;
+    private LocalDate dateBegin;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DateOptions.PATTERN)
+    private LocalDate dateEnd;
     @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = TimeOptions.PATTERN)
     private LocalTime time;

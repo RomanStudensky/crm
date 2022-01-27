@@ -26,4 +26,8 @@ public class ContactDto extends ParentDto implements Serializable {
     private LocalDate birthday;
     private String company;
     private String post;
+
+    public String getFullName() {
+        return String.format("%s %s %s", surname, name, (lastname == null ? "" : lastname));
+    }
 }

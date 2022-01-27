@@ -6,6 +6,7 @@ import lombok.Setter;
 import ru.pnzgu.crm.store.states.DealState;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +28,10 @@ public class Deal extends ParentEntity {
     @Enumerated(EnumType.STRING)
     private DealState state;
 
-    @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, mappedBy = "deal")
+    @Column(name = "date_execute", nullable = false)
+    private LocalDate date;
+
+    @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, mappedBy = "deal")
     private List<DealProduct> sostav = new ArrayList<>();
 
     @ManyToOne(optional = false, cascade = { CascadeType.ALL })
